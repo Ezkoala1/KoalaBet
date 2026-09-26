@@ -3,13 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>🐨 Koala Bet — DonutSMP Casino</title>
+<title>Koala Bet — DonutSMP Casino · Provably snappy, instant payouts</title>
 <style>
   :root{
     --bg:#0a0b0d; --panel:#131417; --panel2:#1a1c20; --panel3:#22252a;
     --line:#272a30; --line2:#3a3e46;
     --text:#f2f3f5; --dim:#c9cdd4; --muted:#8b919c;
-    --white:#ffffff; --err:#e05252;
+    --white:#ffffff; --err:#e05252; --ok:#43c78b;
   }
   *{box-sizing:border-box; margin:0; padding:0}
   html{scroll-behavior:smooth}
@@ -20,14 +20,24 @@
   header{display:flex; align-items:center; justify-content:space-between; padding:16px 26px; border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(10,11,13,.94); backdrop-filter:blur(8px); z-index:10}
   .brand{font-size:1.3rem; font-weight:800; letter-spacing:.4px; display:flex; align-items:center; gap:9px; cursor:pointer}
   .brand .ko{filter:grayscale(1)}
+  .header-right{display:flex; align-items:center; gap:10px}
+  .secure-chip{display:inline-flex; align-items:center; gap:6px; color:var(--muted); font-size:.72rem; font-weight:700; letter-spacing:1px; text-transform:uppercase}
+  .secure-chip svg{width:11px; height:11px; fill:var(--ok)}
   .balance-chip{background:var(--panel2); border:1px solid var(--line2); border-radius:10px; padding:8px 18px; font-weight:800; color:var(--white); font-variant-numeric:tabular-nums; transition:box-shadow .3s}
   .balance-chip.bump{box-shadow:0 0 0 3px rgba(255,255,255,.18); border-color:#fff}
   nav{display:flex; gap:2px; flex-wrap:wrap; padding:10px 18px; border-bottom:1px solid var(--line); position:sticky; top:63px; background:rgba(10,11,13,.94); backdrop-filter:blur(8px); z-index:9}
-  nav button{background:none; border:none; color:var(--muted); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:.92rem; font-weight:600; letter-spacing:.2px; transition:color .15s, background .15s}
+  nav button{background:none; border:none; color:var(--muted); padding:9px 14px; border-radius:8px; cursor:pointer; font-size:.92rem; font-weight:600; letter-spacing:.2px; transition:color .15s, background .15s}
   nav button:hover{color:var(--text)}
   nav button.active{color:var(--white); background:var(--panel2)}
-  main{max-width:860px; margin:0 auto; padding:30px 18px 80px}
-  footer{text-align:center; color:var(--muted); font-size:.78rem; padding:30px 16px; letter-spacing:.3px}
+  main{max-width:880px; margin:0 auto; padding:30px 18px 80px}
+  footer{text-align:center; color:var(--muted); font-size:.78rem; padding:26px 16px 14px; letter-spacing:.3px}
+  footer .foot-links{display:flex; gap:18px; justify-content:center; margin-bottom:12px; flex-wrap:wrap}
+  footer .foot-links a{color:var(--dim); text-decoration:none; font-weight:600}
+  footer .foot-links a:hover{color:#fff}
+  .rg-line{max-width:640px; margin:0 auto; line-height:1.6; font-size:.72rem; color:#6b7280}
+  .badge{display:inline-flex; align-items:center; gap:6px; background:var(--panel2); border:1px solid var(--line2); border-radius:999px; padding:5px 12px; font-size:.72rem; font-weight:700; color:var(--dim); letter-spacing:.4px}
+  .badge .dot{width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 8px rgba(67,199,139,.8)}
+  .badge .dot.gray{background:#5b616c; box-shadow:none}
 
   /* ---------- primitives ---------- */
   .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:28px}
@@ -52,18 +62,23 @@
   .hidden{display:none!important}
   .divider{height:1px; background:var(--line); margin:20px 0}
 
-  /* ---------- lobby ---------- */
-  .hero{margin:8px 0 26px}
+  /* ---------- trust strip + lobby ---------- */
+  .trust-strip{display:grid; grid-template-columns:repeat(auto-fit,minmax(190px,1fr)); gap:10px; margin:0 0 26px}
+  .trust-item{display:flex; gap:11px; align-items:flex-start; background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:14px 16px}
+  .trust-item .ticon{font-size:1.15rem; filter:grayscale(1); margin-top:1px}
+  .trust-item b{display:block; font-size:.82rem; color:var(--white); letter-spacing:.3px}
+  .trust-item span{display:block; color:var(--muted); font-size:.74rem; margin-top:3px; line-height:1.45}
+  .hero{margin:8px 0 22px; display:flex; justify-content:space-between; align-items:flex-end; gap:18px; flex-wrap:wrap}
   .hero h1{font-size:2rem; font-weight:800; letter-spacing:-.5px; color:var(--white)}
   .hero h1 em{font-style:normal; color:var(--muted)}
   .hero p{color:var(--muted); margin-top:8px; max-width:520px; line-height:1.6}
-  .games-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px}
-  .game-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:26px 24px; cursor:pointer; transition:border-color .15s, transform .12s; text-align:left}
+  .games-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px}
+  .game-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:22px 20px; cursor:pointer; transition:border-color .15s, transform .12s; text-align:left}
   .game-card:hover{border-color:#fff; transform:translateY(-2px)}
-  .game-card .icon{font-size:1.9rem; margin-bottom:14px; filter:grayscale(1)}
-  .game-card h3{font-size:1.05rem; font-weight:800; color:var(--white); letter-spacing:.3px}
-  .game-card p{color:var(--muted); font-size:.85rem; margin-top:7px; line-height:1.5}
-  .game-card .go{margin-top:16px; color:var(--muted); font-size:.78rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase}
+  .game-card .icon{font-size:1.7rem; margin-bottom:12px; filter:grayscale(1)}
+  .game-card h3{font-size:1rem; font-weight:800; color:var(--white); letter-spacing:.3px}
+  .game-card p{color:var(--muted); font-size:.82rem; margin-top:6px; line-height:1.5}
+  .game-card .go{margin-top:14px; color:var(--muted); font-size:.74rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase}
   .game-card:hover .go{color:#fff}
 
   /* ---------- coinflip ---------- */
@@ -82,7 +97,7 @@
   @keyframes jig{0%{transform:translateY(-4px)}50%{transform:translateY(4px)}100%{transform:translateY(-4px)}}
 
   /* ---------- mines ---------- */
-  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin:22px 0}
+  .board{display:grid; gap:9px; margin:22px 0}
   .tile{aspect-ratio:1; background:var(--panel2); border:1px solid var(--line2); border-radius:11px; font-size:1.55rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; color:transparent; transition:transform .08s, border-color .12s, background .12s}
   .tile:hover:not(:disabled){transform:scale(1.06); border-color:#fff}
   .tile:disabled{cursor:default}
@@ -93,24 +108,89 @@
   .stat .v{font-size:1.12rem; font-weight:800; color:var(--white); font-variant-numeric:tabular-nums}
   .stat .k{font-size:.68rem; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:1.6px}
 
-  /* ---------- stats / leaderboard ---------- */
-  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px}
+  /* ---------- crash / limbo ---------- */
+  .crash-stage{background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:40px 20px; text-align:center; margin:22px 0}
+  .crash-mult{font-size:3.4rem; font-weight:900; letter-spacing:-1px; color:var(--white); font-variant-numeric:tabular-nums}
+  .crash-mult.lost{color:var(--err)}
+  .crash-mult.won{color:var(--ok)}
+  .crash-bar{height:8px; background:var(--panel3); border-radius:99px; overflow:hidden; margin:22px auto 8px; max-width:420px}
+  .crash-bar>div{height:100%; width:0%; background:var(--white); transition:width .12s linear}
+  .crash-path{display:flex; justify-content:space-between; max-width:420px; margin:0 auto; color:var(--muted); font-size:.72rem; font-weight:700}
+
+  /* ---------- blackjack ---------- */
+  .bj-table{background:var(--panel2); border:1px solid var(--line); border-radius:14px; padding:26px; margin:20px 0}
+  .bj-hand{min-height:64px; display:flex; gap:8px; flex-wrap:wrap; margin-top:8px}
+  .bj-card{width:52px; height:74px; border-radius:9px; background:#fff; color:#0a0b0d; display:flex; flex-direction:column; align-items:center; justify-content:center; font-weight:900; font-size:1.15rem; box-shadow:0 4px 12px rgba(0,0,0,.4); animation:deal .25s ease-out}
+  .bj-card.red{color:#c0392b}
+  .bj-card .s{font-size:1.4rem; line-height:1}
+  @keyframes deal{from{transform:translateY(-14px) rotate(-6deg); opacity:0}to{transform:none; opacity:1}}
+  .bj-total{color:var(--muted); font-size:.78rem; font-weight:700; text-transform:uppercase; letter-spacing:1.4px; margin-top:14px}
+  .bj-total b{color:#fff; font-size:.95rem}
+
+  /* ---------- roulette ---------- */
+  .roul-result{display:flex; align-items:center; justify-content:center; gap:16px; padding:26px 0; margin:8px 0}
+  .roul-pocket{width:76px; height:76px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:1.7rem; font-weight:900; color:#fff; background:#17181c; border:3px solid var(--line2); animation:pop .3s ease-out}
+  .roul-pocket.red{background:#a83232; border-color:#c05555}
+  .roul-pocket.green{background:#1e7a4c; border-color:#2e9966}
+  @keyframes pop{from{transform:scale(.5); opacity:0}to{transform:scale(1); opacity:1}}
+  .roul-word{font-size:1rem; font-weight:800; text-transform:uppercase; letter-spacing:2px; color:var(--muted)}
+  .roul-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:6px}
+  .roul-grid .btn{margin-top:0; padding:11px 8px; font-size:.8rem; letter-spacing:.3px}
+
+  /* ---------- deposit wizard ---------- */
+  .steps{display:flex; gap:0; margin:18px 0 24px; counter-reset:step}
+  .step{flex:1; text-align:center; position:relative; color:var(--muted); font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:1px}
+  .step::before{content:attr(data-n); display:flex; width:30px; height:30px; border-radius:50%; border:2px solid var(--line2); color:var(--muted); align-items:center; justify-content:center; margin:0 auto 7px; font-size:.8rem; background:var(--panel2); position:relative; z-index:1}
+  .step::after{content:""; position:absolute; top:15px; left:-50%; width:100%; height:2px; background:var(--line2)}
+  .step:first-child::after{display:none}
+  .step.active::before{border-color:#fff; color:#fff; background:var(--panel3)}
+  .step.done::before{border-color:var(--ok); color:var(--ok); content:"✓"}
+  .step.active{color:var(--dim)} .step.done{color:var(--dim)}
+  .dep-amounts{display:grid; grid-template-columns:repeat(auto-fit,minmax(86px,1fr)); gap:8px; margin-top:8px}
+  .dep-amounts .btn{margin-top:0; padding:11px 6px; font-size:.85rem}
+  .dep-code{display:flex; align-items:center; justify-content:space-between; gap:12px; background:var(--panel2); border:1px dashed var(--line2); border-radius:12px; padding:14px 18px; margin-top:8px}
+  .dep-code b{font-size:1.6rem; letter-spacing:6px; color:#fff; font-variant-numeric:tabular-nums}
+  .dep-code .copy{background:var(--panel3); border:1px solid var(--line2); color:var(--text); border-radius:8px; padding:8px 14px; font-weight:700; font-size:.78rem; cursor:pointer; text-transform:uppercase; letter-spacing:1px}
+  .dep-code .copy:hover{border-color:#fff}
+  .dep-payee{background:var(--panel2); border:1px solid var(--line2); border-radius:12px; padding:14px 18px; margin-top:8px; display:flex; align-items:center; justify-content:space-between; gap:10px}
+  .dep-payee b{font-size:1.15rem; color:#fff}
+  .dep-warn{display:flex; gap:9px; background:rgba(224,160,60,.07); border:1px solid rgba(224,160,60,.3); border-radius:10px; padding:11px 14px; margin-top:14px; color:#d9a24a; font-size:.82rem; line-height:1.5}
+  .dep-status{border:1px solid var(--line2); border-radius:12px; padding:16px 18px; margin-top:10px}
+  .dep-status .rowline{display:flex; justify-content:space-between; align-items:center; padding:7px 0; font-size:.92rem}
+  .dep-status .rowline+.rowline{border-top:1px solid var(--line)}
+  .pill{padding:3px 10px; border-radius:999px; font-size:.68rem; font-weight:800; text-transform:uppercase; letter-spacing:1px; border:1px solid var(--line2); color:var(--muted)}
+  .pill.wait{color:#d9a24a; border-color:rgba(224,160,60,.4); animation:pulse 1.6s infinite}
+  .pill.paid{color:var(--ok); border-color:rgba(67,199,139,.4)}
+  .pill.fail{color:var(--err); border-color:rgba(224,82,82,.4)}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+  .checklist{margin-top:14px; display:grid; gap:9px}
+  .checklist div{display:flex; gap:10px; color:var(--dim); font-size:.88rem; line-height:1.5}
+  .checklist .tick{color:var(--ok); font-weight:900}
+
+  /* ---------- history / stats ---------- */
   table{width:100%; border-collapse:collapse}
   td,th{padding:12px 10px; text-align:left; border-bottom:1px solid var(--line); font-size:.95rem}
   th{color:var(--muted); font-size:.7rem; text-transform:uppercase; letter-spacing:1.8px}
   tr:last-child td{border-bottom:none}
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px}
   .mcname{background:var(--panel2); border:1px dashed var(--line2); border-radius:10px; padding:12px 15px; margin-top:16px; font-size:.92rem; color:var(--dim)}
+  .tx-kind{font-size:.72rem; font-weight:800; text-transform:uppercase; letter-spacing:1.2px; color:var(--muted)}
+  .tx-plus{color:var(--ok); font-weight:800} .tx-minus{color:var(--err); font-weight:800}
 
   details{margin-top:16px; color:var(--muted); font-size:.85rem}
   summary{cursor:pointer; color:var(--dim)}
   .setup-note{background:var(--panel2); border:1px solid var(--line2); border-radius:10px; padding:12px 15px; margin-top:14px; display:none; word-break:break-all; font-size:.88rem; color:var(--dim)}
+  @media (max-width:640px){ .crash-mult{font-size:2.5rem} .step{font-size:.6rem} }
 </style>
 </head>
 <body>
 
 <header>
   <div class="brand" onclick="go('lobby')"><span class="ko">🐨</span> KOALA <span style="color:var(--muted); font-weight:600">BET</span></div>
-  <div class="balance-chip hidden" id="balanceChip">🪙 0</div>
+  <div class="header-right">
+    <span class="secure-chip" id="secureChip"><svg viewBox="0 0 16 16"><path d="M8 1a4 4 0 0 0-4 4v2H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1h-1V5a4 4 0 0 0-4-4zm-2 4a2 2 0 1 1 4 0v2H6V5z"/></svg>Secure</span>
+    <div class="balance-chip hidden" id="balanceChip">🪙 0</div>
+  </div>
 </header>
 
 <!-- ============ SETUP (owner only) ============ -->
@@ -153,6 +233,10 @@
     <button data-page="flip">Coinflip</button>
     <button data-page="slots">Slots</button>
     <button data-page="mines">Mines</button>
+    <button data-page="crash">Crash</button>
+    <button data-page="blackjack">Blackjack</button>
+    <button data-page="roulette">Roulette</button>
+    <button data-page="limbo">Limbo</button>
     <button data-page="wallet">Wallet</button>
     <button data-page="stats">Stats</button>
     <button data-page="top">Top</button>
@@ -162,8 +246,17 @@
     <!-- LOBBY -->
     <div id="page-lobby">
       <div class="hero">
-        <h1> Koala Bet<em>.</em></h1>
-        <p>Three games. One wallet, shared with the Discord bot. Deposits and withdrawals pay out in-game, automatically.</p>
+        <div>
+          <h1> Koala Bet<em>.</em></h1>
+          <p>Seven games. One wallet, shared with the Discord bot. Deposits and withdrawals pay out in-game, automatically.</p>
+        </div>
+        <span class="badge"><span class="dot"></span> casino online</span>
+      </div>
+      <div class="trust-strip">
+        <div class="trust-item"><div class="ticon">⚡</div><div><b>Instant payouts</b><span>Withdrawals are paid in-game by the house account, usually in seconds.</span></div></div>
+        <div class="trust-item"><div class="ticon">🔐</div><div><b>One-time login codes</b><span>Accounts are your Discord identity — codes expire in 10 minutes.</span></div></div>
+        <div class="trust-item"><div class="ticon">👁️</div><div><b>Every deposit confirmed</b><span>The watcher sees your payment in chat and credits you automatically.</span></div></div>
+        <div class="trust-item"><div class="ticon">📜</div><div><b>Full history</b><span>Every deposit, withdrawal and bet is recorded on your account.</span></div></div>
       </div>
       <div class="games-grid">
         <button class="game-card" onclick="go('flip')">
@@ -181,7 +274,31 @@
         <button class="game-card" onclick="go('mines')">
           <div class="icon">💣</div>
           <h3>Mines</h3>
-          <p>Uncover gems, dodge bombs, cash out any time.</p>
+          <p>Full 5×5 board on web. Cash out any time.</p>
+          <div class="go">Play →</div>
+        </button>
+        <button class="game-card" onclick="go('crash')">
+          <div class="icon">🚀</div>
+          <h3>Crash</h3>
+          <p>Claim your multiplier before the rocket busts.</p>
+          <div class="go">Play →</div>
+        </button>
+        <button class="game-card" onclick="go('blackjack')">
+          <div class="icon">🃏</div>
+          <h3>Blackjack</h3>
+          <p>Beat the dealer to 21. Blackjack pays 3:2.</p>
+          <div class="go">Play →</div>
+        </button>
+        <button class="game-card" onclick="go('roulette')">
+          <div class="icon">🎡</div>
+          <h3>Roulette</h3>
+          <p>European wheel, single zero. Straight pays 36x.</p>
+          <div class="go">Play →</div>
+        </button>
+        <button class="game-card" onclick="go('limbo')">
+          <div class="icon">📉</div>
+          <h3>Limbo</h3>
+          <p>Call your multiplier — roll over to win, up to 100x.</p>
           <div class="go">Play →</div>
         </button>
       </div>
@@ -221,12 +338,12 @@
     <!-- MINES -->
     <div id="page-mines" class="hidden">
       <div class="card">
-        <h2>Mines</h2>
+        <h2>Mines <span style="color:var(--muted); font-size:.7rem; letter-spacing:1px; font-weight:700">· 25 tiles on web</span></h2>
         <p class="sub">Every safe tile raises your multiplier. One bomb takes it all.</p>
         <div id="minesSetup">
           <label>Bet</label>
           <input id="minesBet" type="number" min="1" value="1000">
-          <label>Mines (1–23)</label>
+          <label>Mines (1–24)</label>
           <select id="minesCount"></select>
           <button class="btn" id="btnMinesStart">Start</button>
         </div>
@@ -236,25 +353,187 @@
             <div class="stat"><div class="v" id="minesGems">0</div><div class="k">Gems</div></div>
             <div class="stat"><div class="v" id="minesCash">—</div><div class="k">Cash out</div></div>
           </div>
-          <div class="board" id="minesBoard"></div>
+          <div class="board" id="minesBoard" style="grid-template-columns:repeat(5,1fr)"></div>
           <button class="btn danger" id="btnMinesCash">Cash out</button>
         </div>
         <div class="msg" id="minesMsg"></div>
+        <details><summary>Why 25 tiles here but 24 on Discord?</summary>
+          <p style="margin-top:8px">Discord caps any message at 25 components (5 rows × 5). The Discord version needs 24 tile buttons <i>plus</i> a cash-out button, so it plays on a 24-tile board. The website has no such limit, so you get the full 5×5.</p>
+        </details>
       </div>
     </div>
 
-    <!-- WALLET -->
+    <!-- CRASH -->
+    <div id="page-crash" class="hidden">
+      <div class="card">
+        <h2>Crash</h2>
+        <p class="sub">Pick your claim point. If the rocket flies past it before busting, you win claim × bet.</p>
+        <label>Bet</label>
+        <input id="crashBet" type="number" min="1" value="1000">
+        <label>Claim at multiplier (1.05 – 5.00)</label>
+        <input id="crashClaim" type="number" min="1.05" max="5" step="0.05" value="2.00">
+        <div class="dep-amounts">
+          <button class="btn ghost claim-btn" data-claim="1.50">1.50x</button>
+          <button class="btn ghost claim-btn selected" data-claim="2.00">2.00x</button>
+          <button class="btn ghost claim-btn" data-claim="3.00">3.00x</button>
+          <button class="btn ghost claim-btn" data-claim="5.00">5.00x</button>
+        </div>
+        <button class="btn" id="btnCrash">Launch 🚀</button>
+        <div class="crash-stage">
+          <div class="crash-mult" id="crashMult">x1.00</div>
+          <div class="crash-bar"><div id="crashFill"></div></div>
+          <div class="crash-path"><span>x1.0</span><span id="crashClaimLbl">claim x2.00</span><span>x5.0</span></div>
+        </div>
+        <div class="msg" id="crashMsg"></div>
+      </div>
+    </div>
+
+    <!-- BLACKJACK -->
+    <div id="page-blackjack" class="hidden">
+      <div class="card">
+        <h2>Blackjack</h2>
+        <p class="sub">You take your cards and stand. The dealer draws to 17. Blackjack pays 3:2, push returns your bet.</p>
+        <label>Bet</label>
+        <input id="bjBet" type="number" min="1" value="1000">
+        <button class="btn" id="btnBj">Deal</button>
+        <div class="bj-table">
+          <div class="bj-total">Dealer <b id="bjDealerTotal"></b></div>
+          <div class="bj-hand" id="bjDealer"></div>
+          <div class="divider" style="margin:14px 0"></div>
+          <div class="bj-total">You <b id="bjPlayerTotal"></b></div>
+          <div class="bj-hand" id="bjPlayer"></div>
+        </div>
+        <div class="msg" id="bjMsg"></div>
+      </div>
+    </div>
+
+    <!-- ROULETTE -->
+    <div id="page-roulette" class="hidden">
+      <div class="card">
+        <h2>Roulette</h2>
+        <p class="sub">European wheel — single zero. Outside bets pay 2x, dozens 3x, straight numbers 36x.</p>
+        <label>Bet</label>
+        <input id="roulBet" type="number" min="1" value="1000">
+        <label>Your bet</label>
+        <div class="roul-grid">
+          <button class="btn ghost roul-btn" data-bet="red">Red</button>
+          <button class="btn ghost roul-btn" data-bet="black">Black</button>
+          <button class="btn ghost roul-btn" data-bet="even">Even</button>
+          <button class="btn ghost roul-btn" data-bet="odd">Odd</button>
+          <button class="btn ghost roul-btn" data-bet="low">1–18</button>
+          <button class="btn ghost roul-btn" data-bet="high">19–36</button>
+          <button class="btn ghost roul-btn" data-bet="dozen1">1st 12</button>
+          <button class="btn ghost roul-btn" data-bet="dozen2">2nd 12</button>
+          <button class="btn ghost roul-btn" data-bet="dozen3">3rd 12</button>
+        </div>
+        <label>Or a straight number (0–36) — pays 36x</label>
+        <input id="roulNumber" type="number" min="0" max="36" placeholder="e.g. 17">
+        <button class="btn" id="btnRoul">Spin</button>
+        <div class="roul-result">
+          <div class="roul-pocket" id="roulPocket">?</div>
+          <div class="roul-word" id="roulWord">place a bet</div>
+        </div>
+        <div class="msg" id="roulMsg"></div>
+      </div>
+    </div>
+
+    <!-- LIMBO -->
+    <div id="page-limbo" class="hidden">
+      <div class="card">
+        <h2>Limbo</h2>
+        <p class="sub">Name your multiplier. The house rolls 0–100; you win if the roll beats 100 ÷ target. Up to 100x.</p>
+        <label>Bet</label>
+        <input id="limboBet" type="number" min="1" value="1000">
+        <label>Target multiplier (1.10 – 100)</label>
+        <input id="limboTarget" type="number" min="1.1" max="100" step="0.1" value="2">
+        <div class="dep-amounts">
+          <button class="btn ghost limbo-btn" data-t="1.5">1.5x <span style="color:var(--muted)">66%</span></button>
+          <button class="btn ghost limbo-btn selected" data-t="2">2x <span style="color:var(--muted)">50%</span></button>
+          <button class="btn ghost limbo-btn" data-t="10">10x <span style="color:var(--muted)">10%</span></button>
+          <button class="btn ghost limbo-btn" data-t="100">100x <span style="color:var(--muted)">1%</span></button>
+        </div>
+        <button class="btn" id="btnLimbo">Roll</button>
+        <div class="crash-stage">
+          <div class="crash-mult" id="limboRoll">0.00</div>
+          <div class="crash-path"><span id="limboNeed">need over 50.00 to hit x2</span></div>
+        </div>
+        <div class="msg" id="limboMsg"></div>
+      </div>
+    </div>
+
+    <!-- WALLET: deposit wizard + withdraw + history -->
     <div id="page-wallet" class="hidden">
       <div class="card">
         <h2>Deposit</h2>
-        <p class="sub">Send in-game to <b style="color:#fff">ezkoala</b>, then register it. The watcher confirms automatically.</p>
-        <label>Minecraft username</label>
-        <input id="depMc" placeholder="ItsCrispyTT" maxlength="16">
-        <label>Amount you are sending</label>
-        <input id="depAmount" type="number" min="1" placeholder="100000">
-        <button class="btn" id="btnDeposit">I'm sending</button>
-        <div class="msg" id="depMsg"></div>
+        <p class="sub">Money moves through the house account <b style="color:#fff">ezkoala</b> on DonutSMP. Four quick steps.</p>
+
+        <div class="steps" id="depSteps">
+          <div class="step active" data-n="1" id="depStep1">Amount</div>
+          <div class="step" data-n="2" id="depStep2">Send</div>
+          <div class="step" data-n="3" id="depStep3">Confirm</div>
+          <div class="step" data-n="4" id="depStep4">Credited</div>
+        </div>
+
+        <!-- step 1: amount -->
+        <div id="depPane1">
+          <label>Minecraft username (who is sending)</label>
+          <input id="depMc" placeholder="ItsCrispyTT" maxlength="16" autocomplete="off">
+          <label>Amount you will send in-game</label>
+          <input id="depAmount" type="number" min="1" placeholder="100000">
+          <div class="dep-amounts">
+            <button class="btn ghost dep-quick" data-amt="10000">10K</button>
+            <button class="btn ghost dep-quick" data-amt="50000">50K</button>
+            <button class="btn ghost dep-quick" data-amt="100000">100K</button>
+            <button class="btn ghost dep-quick" data-amt="500000">500K</button>
+          </div>
+          <div class="dep-warn" id="depRoundWarn">💡 Use a <b>round amount</b> (1000, 25000, 100000…). DonutSMP chat abbreviates numbers ($1.2K), so deposits like 12,345 can't be auto-matched.</div>
+          <button class="btn" id="btnDepositNext">Continue →</button>
+          <div class="msg" id="depMsg"></div>
+        </div>
+
+        <!-- step 2: payment details -->
+        <div id="depPane2" class="hidden">
+          <label>Step 2 — send exactly this amount to this account, in-game</label>
+          <div class="dep-payee">
+            <div><div class="muted" style="font-size:.68rem; text-transform:uppercase; letter-spacing:1.4px">Pay to</div><b id="depPayee">EZKOALA</b></div>
+            <button class="copy" onclick="copyText('EZKOALA')">Copy</button>
+          </div>
+          <label>Exact amount</label>
+          <div class="dep-payee">
+            <b id="depShowAmount">0</b>
+            <button class="copy" onclick="copyText(document.getElementById('depShowAmount').textContent.replace(/,/g,''))">Copy</button>
+          </div>
+          <label>Your confirmation code (only if support asks)</label>
+          <div class="dep-code"><b id="depCode">—</b><button class="copy" onclick="copyText(document.getElementById('depCode').textContent)">Copy</button></div>
+          <div class="checklist">
+            <div><span class="tick">✓</span> Run <b>/pay ezkoala <span id="depCmdAmount">0</span></b> in-game on DonutSMP</div>
+            <div><span class="tick">✓</span> Send from <b id="depCmdName">—</b> — other accounts can't be matched</div>
+            <div><span class="tick">✓</span> Keep the exact amount — the watcher matches on name <b>and</b> amount</div>
+          </div>
+          <button class="btn" id="btnDepSent">I've sent it →</button>
+          <button class="btn ghost" id="btnDepBack1" style="margin-top:10px">← Back</button>
+        </div>
+
+        <!-- step 3: live confirmation -->
+        <div id="depPane3" class="hidden">
+          <label>Step 3 — watching the chat for your payment</label>
+          <div class="dep-status" id="depStatusBox">
+            <div class="rowline"><span>Waiting for <b id="depWaitName">—</b> to send <b id="depWaitAmount">0</b></span><span class="pill wait" id="depWaitPill">waiting</span></div>
+            <div class="rowline"><span>Auto-credit usually lands in ~10 seconds</span><span class="muted" id="depExpires">expires in 15:00</span></div>
+          </div>
+          <div class="msg" id="depLiveMsg"></div>
+        </div>
+
+        <!-- step 4: credited -->
+        <div id="depPane4" class="hidden">
+          <div class="dep-status" style="border-color:rgba(67,199,139,.4)">
+            <div class="rowline"><span><b style="color:var(--ok)">✓ Deposit credited</b></span><span class="pill paid">paid</span></div>
+            <div class="rowline"><span id="depDoneLine">—</span></div>
+          </div>
+          <button class="btn" id="btnDepAgain">Make another deposit</button>
+        </div>
       </div>
+
       <div class="card" style="margin-top:16px">
         <h2>Withdraw</h2>
         <p class="sub">ezkoala pays you in-game automatically, usually within seconds while online.</p>
@@ -262,6 +541,15 @@
         <input id="wdAmount" type="number" min="1">
         <button class="btn" id="btnWithdraw">Withdraw</button>
         <div class="msg" id="wdMsg"></div>
+      </div>
+
+      <div class="card" style="margin-top:16px">
+        <h2>Transaction history</h2>
+        <p class="sub">Your latest account activity — deposits, withdrawals and payouts.</p>
+        <table>
+          <thead><tr><th>When</th><th>Type</th><th>Detail</th><th style="text-align:right">Amount</th></tr></thead>
+          <tbody id="historyBody"><tr><td colspan="4" class="muted">Loading…</td></tr></tbody>
+        </table>
       </div>
     </div>
 
@@ -286,7 +574,16 @@
   </main>
 </section>
 
-<footer>KOALA BET · play money · same wallet as the Discord bot</footer>
+<footer>
+  <div class="foot-links">
+    <a onclick="showFaq()">How it works</a>
+    <a onclick="showFaq()">Fair play</a>
+    <a onclick="showFaq()">Support</a>
+    <a onclick="showFaq()">Terms</a>
+  </div>
+  <div class="rg-line">Koala Bet is a community casino for the DonutSMP server. Balances are in-game currency only — no real money is involved. Gambling can be habit-forming; set yourself limits, never chase losses, and take breaks. Play responsibly.</div>
+  <div style="margin-top:10px; opacity:.6">© 2026 KOALA BET · runs on the ezkoala house account · same wallet as the Discord bot</div>
+</footer>
 
 <script>
 /* ================================================================
@@ -295,7 +592,7 @@
    message via the webhook-token endpoint (CORS-open).
    ================================================================ */
 const $ = id => document.getElementById(id);
-console.log("🐨 Koala Bet build 2026-09-26.6 (monochrome redesign)");
+console.log("🐨 Koala Bet build 2026-09-26.7 (trust polish · 5x5 mines · 7 games · deposit wizard)");
 /* Paste your /websetup site key here and players skip the setup screen:
    const SITE_KEY = "your-key-here"; */
 const SITE_KEY = "";
@@ -303,6 +600,8 @@ const HOOK_KEY = "casino_hook", CHAN_KEY = "casino_chan", TOKEN_KEY = "casino_to
 let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
 let WALLET = null;
 let lastBalance = null;
+let historyTimer = null, expireTimer = null;
+let depState = null;   // {code, mc, amount} while a deposit is in flight
 
 function hook() { return localStorage.getItem(HOOK_KEY) || ""; }
 function chanId() { return localStorage.getItem(CHAN_KEY) || ""; }
@@ -368,17 +667,19 @@ setInterval(() => {
 }, 5000);
 
 /* ================= views ================= */
+const PAGES = ["lobby","flip","slots","mines","crash","blackjack","roulette","limbo","wallet","stats","top"];
 function show(view) {
   ["setup", "login", "app"].forEach(v => $("view-" + v).classList.toggle("hidden", v !== view));
 }
 function go(page) {
   document.querySelectorAll("#mainNav button").forEach(b =>
     b.classList.toggle("active", b.dataset.page === page));
-  ["lobby","flip","slots","mines","wallet","stats","top"].forEach(p =>
-    $("page-" + p).classList.toggle("hidden", p !== page));
+  PAGES.forEach(p => $("page-" + p).classList.toggle("hidden", p !== page));
   window.scrollTo({ top: 0 });
   if (page === "stats") renderStats(WALLET);
   if (page === "top") refreshTop();
+  if (page === "wallet") { refreshHistory(); startDepositPoll(); }
+  else stopDepositPoll();
 }
 document.querySelectorAll("#mainNav button").forEach(b =>
   b.onclick = () => go(b.dataset.page));
@@ -389,6 +690,22 @@ function showMsg(id, text, ok) {
   el.className = "msg " + (ok ? "ok" : "err");
   clearTimeout(el._t);
   el._t = setTimeout(() => el.className = "msg", 8000);
+}
+
+function showFaq() {
+  alert(
+    "HOW IT WORKS\n\n" +
+    "• Your wallet lives on the Koala Bet Discord bot — the website plays with the same balance.\n" +
+    "• Deposit: wallet page → pick an amount → /pay ezkoala in-game → the watcher sees your payment in chat and credits you automatically.\n" +
+    "• Withdraw: the house account pays you in-game, usually within seconds.\n" +
+    "• Use round amounts — DonutSMP chat abbreviates numbers, and deposits are matched by name + exact amount.\n\n" +
+    "FAIR PLAY\n\n" +
+    "• All games resolve on the casino bot with a fixed house edge, the same math for Discord and web play.\n" +
+    "• Every bet is recorded on your account — see Wallet → Transaction history.\n\n" +
+    "SUPPORT\n\n" +
+    "• Run /pays in the deposit channel if a deposit is stuck, or DM ezkoala on Discord.\n" +
+    "• Keep your /link login code private — anyone with it can access your wallet."
+  );
 }
 
 function enterApp() {
@@ -463,6 +780,10 @@ $("btnLogin").onclick = async () => {
 };
 $("loginCode").addEventListener("keydown", e => { if (e.key === "Enter") $("btnLogin").click(); });
 
+function copyText(t) {
+  navigator.clipboard.writeText(t).then(() => {}).catch(() => {});
+}
+
 /* ================= coinflip ================= */
 let chosenSide = "heads";
 document.querySelectorAll(".side-btn").forEach(b => b.onclick = () => {
@@ -515,10 +836,11 @@ $("btnSlots").onclick = async () => {
   }, 1200);
 };
 
-/* ================= mines ================= */
+/* ================= mines (web: full 5x5 = 25 tiles) ================= */
 let minesActive = false;
+const WEB_TILES = 25;   // the bot's web engine also plays 25 (Discord stays 24: component cap)
 const bombsSel = $("minesCount");
-for (let i = 1; i <= 23; i++) bombsSel.add(new Option(i + (i === 3 ? "  ·  classic" : ""), i));
+for (let i = 1; i <= WEB_TILES - 1; i++) bombsSel.add(new Option(i + (i === 3 ? "  ·  classic" : ""), i));
 bombsSel.value = "3";
 
 $("btnMinesStart").onclick = async () => {
@@ -529,14 +851,16 @@ $("btnMinesStart").onclick = async () => {
   $("minesSetup").classList.add("hidden");
   $("minesPlay").classList.remove("hidden");
   $("minesMsg").className = "msg";
-  buildBoard();
+  buildBoard(data.tiles || WEB_TILES);
   updateMinesHud(1.0, 0, 0);
 };
 
-function buildBoard() {
+function buildBoard(tiles) {
   const board = $("minesBoard");
   board.innerHTML = "";
-  for (let i = 0; i < 24; i++) {
+  const cols = tiles === 25 ? 5 : (tiles === 24 ? 6 : 5);
+  board.style.gridTemplateColumns = `repeat(${cols},1fr)`;
+  for (let i = 0; i < tiles; i++) {
     const t = document.createElement("button");
     t.className = "tile";
     t.onclick = () => pickTile(i, t);
@@ -587,29 +911,335 @@ $("btnMinesCash").onclick = async () => {
 function endMinesRound() {
   $("minesPlay").classList.add("hidden");
   $("minesSetup").classList.remove("hidden");
+  $("btnMinesCash").disabled = false;
 }
 
-/* ================= wallet actions ================= */
-$("btnDeposit").onclick = async () => {
+/* ================= crash ================= */
+let claimPct = 2.0;
+document.querySelectorAll(".claim-btn").forEach(b => b.onclick = () => {
+  claimPct = parseFloat(b.dataset.claim);
+  $("crashClaim").value = claimPct.toFixed(2);
+  document.querySelectorAll(".claim-btn").forEach(x => x.classList.remove("selected"));
+  b.classList.add("selected");
+  $("crashClaimLbl").textContent = "claim x" + claimPct.toFixed(2);
+});
+$("crashClaim").addEventListener("input", () => {
+  const v = parseFloat($("crashClaim").value);
+  if (v >= 1.05 && v <= 5) {
+    claimPct = v;
+    document.querySelectorAll(".claim-btn").forEach(x => x.classList.toggle("selected", parseFloat(x.dataset.claim) === v));
+    $("crashClaimLbl").textContent = "claim x" + v.toFixed(2);
+  }
+});
+
+$("btnCrash").onclick = async () => {
+  const bet = parseInt($("crashBet").value);
+  const claim = parseFloat($("crashClaim").value);
+  if (!bet || bet < 1) return showMsg("crashMsg", "Enter a bet.", false);
+  if (!(claim >= 1.05 && claim <= 5)) return showMsg("crashMsg", "Claim must be 1.05 – 5.00.", false);
+  $("btnCrash").disabled = true;
+  const mult = $("crashMult"), fill = $("crashFill");
+  mult.className = "crash-mult"; fill.style.background = "var(--white)";
+  // climb animation while the ticket is in flight; the bot decides instantly
+  let v = 1.0;
+  const climb = setInterval(() => {
+    v = Math.min(v + 0.07, claim);
+    mult.textContent = "x" + v.toFixed(2);
+    fill.style.width = Math.min(100, (v - 1) / 4 * 100) + "%";
+  }, 40);
+  const data = await call("crash", { bet, claim });
+  clearInterval(climb);
+  $("btnCrash").disabled = false;
+  if (!data.ok) { mult.textContent = "x1.00"; fill.style.width = "0%"; return showMsg("crashMsg", data.error, false); }
+  const r = data.result;
+  const showPoint = r.won ? claim : r.bust;
+  fill.style.width = Math.min(100, (showPoint - 1) / 4 * 100) + "%";
+  if (r.won) {
+    mult.textContent = "x" + claim.toFixed(2);
+    mult.classList.add("won");
+    WALLET = r.wallet; setBalance(r.wallet.balance, true);
+    showMsg("crashMsg", `Rocket flew past x${claim.toFixed(2)} (bust was x${r.bust.toFixed(2)}) — you won ${r.payout.toLocaleString()}.`, true);
+  } else {
+    mult.textContent = "💥 x" + r.bust.toFixed(2);
+    mult.classList.add("lost");
+    fill.style.background = "var(--err)";
+    WALLET = r.wallet; setBalance(r.wallet.balance, true);
+    showMsg("crashMsg", `Busted at x${r.bust.toFixed(2)} — you claimed at x${claim.toFixed(2)}. Lost ${bet.toLocaleString()}.`, false);
+  }
+};
+
+/* ================= blackjack ================= */
+const SUIT_RED = { "♥": true, "♦": true };
+function bjValue(cards) {
+  let total = 0, aces = 0;
+  for (const c of cards) {
+    const r = c[0];
+    total += r === "A" ? 11 : (r === "K" || r === "Q" || r === "J" || r === "T" ? 10 : +r);
+    if (r === "A") aces++;
+  }
+  while (total > 21 && aces) { total -= 10; aces--; }
+  return total;
+}
+function bjCardEl(card) {
+  const d = document.createElement("div");
+  d.className = "bj-card" + (SUIT_RED[card[1]] ? " red" : "");
+  d.innerHTML = `<span>${card[0] === "T" ? "10" : card[0]}</span><span class="s">${card[1]}</span>`;
+  return d;
+}
+$("btnBj").onclick = async () => {
+  const bet = parseInt($("bjBet").value);
+  $("btnBj").disabled = true;
+  $("bjPlayer").innerHTML = ""; $("bjDealer").innerHTML = "";
+  $("bjPlayerTotal").textContent = "dealing…"; $("bjDealerTotal").textContent = "";
+  const data = await call("blackjack", { bet });
+  if (!data.ok) { $("btnBj").disabled = false; $("bjPlayerTotal").textContent = ""; return showMsg("bjMsg", data.error, false); }
+  const r = data.result;
+  r.player.forEach((c, i) => setTimeout(() => $("bjPlayer").appendChild(bjCardEl(c)), 200 + i * 260));
+  r.dealer.forEach((c, i) => setTimeout(() => $("bjDealer").appendChild(bjCardEl(c)), 700 + i * 260));
+  setTimeout(() => {
+    $("btnBj").disabled = false;
+    $("bjPlayerTotal").textContent = bjValue(r.player) + (bjValue(r.player) > 21 ? " (bust)" : "");
+    $("bjDealerTotal").textContent = bjValue(r.dealer) + (bjValue(r.dealer) > 21 ? " (bust)" : "");
+    WALLET = r.wallet; setBalance(r.wallet.balance, true);
+    const diff = r.payout - bet;
+    if (r.outcome === "blackjack") showMsg("bjMsg", `BLACKJACK! Paid 3:2 — you won ${r.payout.toLocaleString()}.`, true);
+    else if (r.outcome === "win") showMsg("bjMsg", `You win ${r.payout.toLocaleString()} (2x).`, true);
+    else if (r.outcome === "push") showMsg("bjMsg", "Push — your bet was returned.", true);
+    else showMsg("bjMsg", `Dealer wins — you lost ${bet.toLocaleString()}.`, false);
+  }, 700 + r.dealer.length * 260 + 150);
+};
+
+/* ================= roulette ================= */
+let roulBetType = "red";
+document.querySelectorAll(".roul-btn").forEach(b => b.onclick = () => {
+  roulBetType = b.dataset.bet;
+  document.querySelectorAll(".roul-btn").forEach(x => x.classList.remove("selected"));
+  b.classList.add("selected");
+  $("roulNumber").value = "";
+});
+$("roulNumber").addEventListener("input", () => {
+  if ($("roulNumber").value !== "") {
+    document.querySelectorAll(".roul-btn").forEach(x => x.classList.remove("selected"));
+  }
+});
+$("btnRoul").onclick = async () => {
+  const bet = parseInt($("roulBet").value);
+  const numRaw = $("roulNumber").value.trim();
+  const betType = numRaw !== "" ? numRaw : roulBetType;
+  if (!bet || bet < 1) return showMsg("roulMsg", "Enter a bet.", false);
+  $("btnRoul").disabled = true;
+  const data = await call("roulette", { bet, bet_type: betType });
+  $("btnRoul").disabled = false;
+  if (!data.ok) return showMsg("roulMsg", data.error, false);
+  const r = data.result;
+  const pocket = $("roulPocket");
+  pocket.textContent = r.number;
+  pocket.className = "roul-pocket " + r.color;
+  const won = r.payout > bet;
+  $("roulWord").textContent = `${r.number} ${r.color}`;
+  WALLET = r.wallet; setBalance(r.wallet.balance, true);
+  const what = r.pick !== null && r.pick !== undefined ? `straight ${r.pick}` : r.bet_type;
+  showMsg("roulMsg",
+    won ? `${r.number} ${r.color} — you won ${r.payout.toLocaleString()} on ${what}!`
+        : `${r.number} ${r.color} — ${what} didn't hit. Lost ${bet.toLocaleString()}.`,
+    won);
+};
+
+/* ================= limbo ================= */
+document.querySelectorAll(".limbo-btn").forEach(b => b.onclick = () => {
+  $("limboTarget").value = b.dataset.t;
+  document.querySelectorAll(".limbo-btn").forEach(x => x.classList.remove("selected"));
+  b.classList.add("selected");
+  updateLimboNeed();
+});
+$("limboTarget").addEventListener("input", updateLimboNeed);
+function updateLimboNeed() {
+  const t = parseFloat($("limboTarget").value);
+  if (t >= 1.1 && t <= 100) {
+    $("limboNeed").textContent = `need over ${(100 / t).toFixed(2)} to hit x${t}`;
+    document.querySelectorAll(".limbo-btn").forEach(x => x.classList.toggle("selected", parseFloat(x.dataset.t) === t));
+  }
+}
+$("btnLimbo").onclick = async () => {
+  const bet = parseInt($("limboBet").value);
+  const target = parseFloat($("limboTarget").value);
+  if (!bet || bet < 1) return showMsg("limboMsg", "Enter a bet.", false);
+  if (!(target >= 1.1 && target <= 100)) return showMsg("limboMsg", "Target must be 1.10 – 100.", false);
+  $("btnLimbo").disabled = true;
+  const roll = $("limboRoll");
+  roll.className = "crash-mult";
+  let v = 0;
+  const spin = setInterval(() => {
+    v = Math.min(v + Math.random() * 9 + 2, 100);
+    roll.textContent = v.toFixed(2);
+  }, 50);
+  const data = await call("limbo", { bet, target });
+  clearInterval(spin);
+  $("btnLimbo").disabled = false;
+  if (!data.ok) { roll.textContent = "0.00"; return showMsg("limboMsg", data.error, false); }
+  const r = data.result;
+  roll.textContent = r.roll.toFixed(2);
+  roll.classList.add(r.won ? "won" : "lost");
+  WALLET = r.wallet; setBalance(r.wallet.balance, true);
+  showMsg("limboMsg",
+    r.won ? `Rolled ${r.roll.toFixed(2)} — beat ${(100 / r.target).toFixed(2)} and won ${r.payout.toLocaleString()}!`
+          : `Rolled ${r.roll.toFixed(2)} — needed over ${(100 / r.target).toFixed(2)}. Lost ${bet.toLocaleString()}.`,
+    r.won);
+};
+
+/* ================= deposit wizard ================= */
+function depStep(n) {
+  for (let i = 1; i <= 4; i++) {
+    $("depStep" + i).classList.toggle("active", i === n);
+    $("depStep" + i).classList.toggle("done", i < n);
+    $("depPane" + i).classList.toggle("hidden", i !== n);
+  }
+}
+document.querySelectorAll(".dep-quick").forEach(b => b.onclick = () => {
+  $("depAmount").value = b.dataset.amt;
+  document.querySelectorAll(".dep-quick").forEach(x => x.classList.remove("selected"));
+  b.classList.add("selected");
+  depRoundCheck();
+});
+function depRoundCheck() {
+  const a = parseInt($("depAmount").value);
+  const warn = $("depRoundWarn");
+  if (a && a > 0) {
+    const round = a % 1000 === 0;
+    warn.innerHTML = round
+      ? "✅ Round amount — auto-match will work."
+      : "⚠️ <b>Not a round amount.</b> DonutSMP chat shows $1.2K-style abbreviations, so 12,345 can never be matched. The bot only auto-confirms <b>exact</b> amounts — pick 10,000 or 12,000 instead.";
+    warn.style.color = round ? "var(--ok)" : "#d9a24a";
+    warn.style.borderColor = round ? "rgba(67,199,139,.3)" : "rgba(224,160,60,.3)";
+  }
+}
+$("depAmount").addEventListener("input", depRoundCheck);
+
+$("btnDepositNext").onclick = async () => {
   const mc = $("depMc").value.trim();
   const amount = parseInt($("depAmount").value);
   if (!/^[A-Za-z0-9_]{3,16}$/.test(mc)) return showMsg("depMsg", "Enter a valid Minecraft username (3–16 letters).", false);
   if (!amount || amount < 1) return showMsg("depMsg", "Enter the amount you are sending.", false);
+  $("btnDepositNext").disabled = true;
   const data = await call("deposit", { mc_name: mc, amount });
+  $("btnDepositNext").disabled = false;
   if (!data.ok) return showMsg("depMsg", data.error, false);
-  showMsg("depMsg", `Registered. Send ${amount.toLocaleString()} in-game from ${mc} to ${data.to.toUpperCase()} (code ${data.code}). It lands in ~10s. Round amounts only — DonutSMP chat abbreviates.`, true);
-  setTimeout(refreshWallet, 12000);
-  setTimeout(refreshWallet, 25000);
+  depState = { code: data.code, mc, amount, expires_in: data.expires_in || 900 };
+  $("depPayee").textContent = data.to.toUpperCase();
+  $("depShowAmount").textContent = amount.toLocaleString();
+  $("depCode").textContent = data.code;
+  $("depCmdAmount").textContent = amount.toLocaleString();
+  $("depCmdName").textContent = mc;
+  $("depWaitName").textContent = mc;
+  $("depWaitAmount").textContent = amount.toLocaleString();
+  depStep(2);
+  refreshWallet();  // wallet already reflects nothing; keeps chip fresh anyway
 };
 
+$("btnDepSent").onclick = () => {
+  if (!depState) return;
+  depStep(3);
+  $("depLiveMsg").className = "msg";
+  startDepositPoll(true);
+};
+$("btnDepBack1").onclick = () => { depStep(1); };
+$("btnDepAgain").onclick = () => { depState = null; depRoundCheck(); depStep(1); };
+
+function depExpiresTick() {
+  if (!depState || !$("depPane3") || $("depPane3").classList.contains("hidden")) return;
+  // expiry is enforced bot-side (PAYMENT_TTL); we show a friendly countdown from registration
+  if (!depState._expiresAt) depState._expiresAt = Date.now() + (depState.expires_in || 900) * 1000;
+  const left = Math.max(0, Math.floor((depState._expiresAt - Date.now()) / 1000));
+  $("depExpires").textContent = "expires in " + Math.floor(left / 60) + ":" + String(left % 60).padStart(2, "0");
+}
+
+let depPolling = false;
+async function pollDepositStatus(quick) {
+  if (!depState || depPolling) return;
+  depPolling = true;
+  try {
+    const d = await call("deposit_status");
+    if (d.ok) {
+      const mine = d.pending.find(p => p.code === depState.code);
+      if (!mine) {
+        // no longer pending — it either landed or expired; check history
+        const h = await call("history");
+        const entry = h.ok && h.history.find(x => x.kind === "deposit" && x.amount === depState.amount);
+        if (entry && entry.status === "paid") {
+          depStep(4);
+          $("depDoneLine").textContent = `${depState.amount.toLocaleString()} was credited to your wallet from ${depState.mc}.`;
+          WALLET = await refreshWalletReturn();
+          showMsg("depLiveMsg", "Deposit confirmed automatically by the watcher. 💰", true);
+          clearInterval(expireTimer);
+        } else {
+          $("depWaitPill").textContent = "expired";
+          $("depWaitPill").className = "pill fail";
+          $("depWaitPill").classList.remove("wait");
+          $("depLiveMsg").textContent = "Pending deposit expired — start a new one. Nothing was lost: you only pay when a pending deposit exists.";
+          $("depLiveMsg").className = "msg err";
+          clearInterval(expireTimer);
+        }
+      } else if (quick) {
+        $("depExpires").textContent = "expires in " + Math.ceil(mine.expires_in / 60) + " min";
+      }
+    }
+  } finally {
+    depPolling = false;
+  }
+}
+async function refreshWalletReturn() {
+  const d = await call("wallet");
+  if (d.ok) { WALLET = d.wallet; setBalance(WALLET.balance, true); }
+  return WALLET;
+}
+function startDepositPoll(quick) {
+  stopDepositPoll();
+  if (!depState) return;
+  if (quick) pollDepositStatus(true);
+  historyTimer = setInterval(() => pollDepositStatus(false), 5000);
+  expireTimer = setInterval(depExpiresTick, 1000);
+}
+function stopDepositPoll() {
+  if (historyTimer) { clearInterval(historyTimer); historyTimer = null; }
+  if (expireTimer) { clearInterval(expireTimer); expireTimer = null; }
+}
+
+/* ================= withdraw ================= */
 $("btnWithdraw").onclick = async () => {
   const amount = parseInt($("wdAmount").value);
   if (!amount || amount < 1) return showMsg("wdMsg", "Enter an amount.", false);
+  $("btnWithdraw").disabled = true;
   const data = await call("withdraw", { amount });
+  $("btnWithdraw").disabled = false;
   if (!data.ok) return showMsg("wdMsg", data.error, false);
   WALLET = data.wallet; setBalance(data.wallet.balance, true);
   showMsg("wdMsg", `Queued #${data.withdraw_id} — ${data.to.toUpperCase()} will /pay you ${amount.toLocaleString()} in-game shortly.`, true);
+  refreshHistory();
 };
+
+/* ================= history ================= */
+const TX_LABEL = {
+  "deposit:paid":     ["Deposit", "paid in-game"],
+  "deposit:expired":  ["Deposit", "never arrived"],
+  "deposit:cancelled":["Deposit", "cancelled"],
+  "withdraw:sent":    ["Withdrawal", "paid to you"],
+  "withdraw:failed":  ["Withdrawal", "failed — refunded"],
+  "withdraw:cancelled":["Withdrawal", "cancelled"],
+};
+async function refreshHistory() {
+  if (!TOKEN) return;
+  const d = await call("history");
+  const body = $("historyBody");
+  if (!d.ok) { body.innerHTML = '<tr><td colspan="4" class="muted">History unavailable right now.</td></tr>'; return; }
+  if (!d.history.length) { body.innerHTML = '<tr><td colspan="4" class="muted">No activity yet — make your first deposit!</td></tr>'; return; }
+  body.innerHTML = d.history.map(h => {
+    const [label, detail] = TX_LABEL[`${h.kind}:${h.status}`] || [h.kind, h.status];
+    const when = new Date(h.at * 1000).toLocaleString([], { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" });
+    const cls = h.kind === "deposit" ? "tx-plus" : "tx-minus";
+    const sign = h.kind === "deposit" ? "+" : "−";
+    return `<tr><td class="muted">${when}</td><td><span class="tx-kind">${label}</span></td><td class="muted">${detail}</td><td style="text-align:right" class="${cls}">${sign}${h.amount.toLocaleString()}</td></tr>`;
+  }).join("");
+}
 
 /* ================= stats & leaderboard ================= */
 function renderStats(w) {
