@@ -3,88 +3,128 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>🍩 Koala Bet — DonutSMP Casino</title>
+<title>🐨 Koala Bet — DonutSMP Casino</title>
 <style>
   :root{
-    --bg:#0e1117; --panel:#171c26; --panel2:#1e2530; --line:#2a3342;
-    --text:#e8ecf3; --muted:#8b96a8; --accent:#f6b73c; --accent2:#e8890c;
-    --green:#37c26e; --red:#e05252; --blue:#4aa3ff;
+    --bg:#0a0b0d; --panel:#131417; --panel2:#1a1c20; --panel3:#22252a;
+    --line:#272a30; --line2:#3a3e46;
+    --text:#f2f3f5; --dim:#c9cdd4; --muted:#8b919c;
+    --white:#ffffff; --err:#e05252;
   }
   *{box-sizing:border-box; margin:0; padding:0}
-  body{background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,sans-serif; min-height:100vh}
-  header{display:flex; align-items:center; justify-content:space-between; padding:14px 22px; border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(14,17,23,.92); backdrop-filter:blur(6px); z-index:5}
-  .brand{font-size:1.25rem; font-weight:700; letter-spacing:.5px}
-  .brand span{color:var(--accent)}
-  .balance-chip{background:var(--panel2); border:1px solid var(--line); border-radius:999px; padding:7px 16px; font-weight:700; color:var(--accent)}
-  nav{display:flex; gap:6px; flex-wrap:wrap; justify-content:center; padding:12px; border-bottom:1px solid var(--line); position:sticky; top:58px; background:rgba(14,17,23,.92); z-index:4}
-  nav button{background:none; border:1px solid transparent; color:var(--muted); padding:8px 14px; border-radius:8px; cursor:pointer; font-size:.95rem; font-weight:600}
-  nav button.active{color:var(--accent); border-color:var(--line); background:var(--panel)}
-  main{max-width:760px; margin:0 auto; padding:22px 16px 60px}
-  .card{background:var(--panel); border:1px solid var(--line); border-radius:14px; padding:22px; margin-bottom:18px}
-  h2{margin-bottom:14px; font-size:1.15rem}
-  .muted{color:var(--muted); font-size:.9rem}
-  input,select{background:var(--panel2); border:1px solid var(--line); color:var(--text); border-radius:8px; padding:10px 12px; font-size:1rem; width:100%}
-  input:focus,select:focus{outline:none; border-color:var(--accent)}
-  label{display:block; margin:12px 0 6px; color:var(--muted); font-size:.88rem; font-weight:600}
-  .btn{background:linear-gradient(180deg,var(--accent),var(--accent2)); color:#241703; border:none; border-radius:9px; padding:12px 20px; font-size:1rem; font-weight:800; cursor:pointer; width:100%; margin-top:14px}
-  .btn:hover{filter:brightness(1.08)}
-  .btn.secondary{background:var(--panel2); color:var(--text); border:1px solid var(--line)}
-  .btn.red{background:linear-gradient(180deg,#ff6b6b,#c0392b); color:#fff}
-  .btn:disabled{opacity:.5; cursor:default}
+  html{scroll-behavior:smooth}
+  body{background:var(--bg); color:var(--text); font-family:'Segoe UI',system-ui,-apple-system,sans-serif; min-height:100vh; -webkit-font-smoothing:antialiased}
+  ::selection{background:#fff; color:#000}
+
+  /* ---------- chrome ---------- */
+  header{display:flex; align-items:center; justify-content:space-between; padding:16px 26px; border-bottom:1px solid var(--line); position:sticky; top:0; background:rgba(10,11,13,.94); backdrop-filter:blur(8px); z-index:10}
+  .brand{font-size:1.3rem; font-weight:800; letter-spacing:.4px; display:flex; align-items:center; gap:9px; cursor:pointer}
+  .brand .ko{filter:grayscale(1)}
+  .balance-chip{background:var(--panel2); border:1px solid var(--line2); border-radius:10px; padding:8px 18px; font-weight:800; color:var(--white); font-variant-numeric:tabular-nums; transition:box-shadow .3s}
+  .balance-chip.bump{box-shadow:0 0 0 3px rgba(255,255,255,.18); border-color:#fff}
+  nav{display:flex; gap:2px; flex-wrap:wrap; padding:10px 18px; border-bottom:1px solid var(--line); position:sticky; top:63px; background:rgba(10,11,13,.94); backdrop-filter:blur(8px); z-index:9}
+  nav button{background:none; border:none; color:var(--muted); padding:9px 16px; border-radius:8px; cursor:pointer; font-size:.92rem; font-weight:600; letter-spacing:.2px; transition:color .15s, background .15s}
+  nav button:hover{color:var(--text)}
+  nav button.active{color:var(--white); background:var(--panel2)}
+  main{max-width:860px; margin:0 auto; padding:30px 18px 80px}
+  footer{text-align:center; color:var(--muted); font-size:.78rem; padding:30px 16px; letter-spacing:.3px}
+
+  /* ---------- primitives ---------- */
+  .card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:28px}
+  .muted{color:var(--muted); font-size:.9rem; line-height:1.55}
+  h2{font-size:1.05rem; font-weight:800; text-transform:uppercase; letter-spacing:2.5px; color:var(--white); margin-bottom:6px}
+  .sub{color:var(--muted); font-size:.9rem; margin-bottom:20px}
+  label{display:block; margin:16px 0 7px; color:var(--muted); font-size:.75rem; font-weight:700; text-transform:uppercase; letter-spacing:1.5px}
+  input,select{background:var(--panel2); border:1px solid var(--line2); color:var(--text); border-radius:10px; padding:12px 14px; font-size:1.05rem; width:100%; transition:border-color .15s}
+  input:focus,select:focus{outline:none; border-color:#fff}
+  .btn{background:var(--white); color:#0a0b0d; border:none; border-radius:10px; padding:13px 22px; font-size:.95rem; font-weight:800; letter-spacing:.5px; cursor:pointer; width:100%; margin-top:18px; text-transform:uppercase; transition:transform .1s, opacity .15s}
+  .btn:hover:not(:disabled){transform:translateY(-1px)}
+  .btn:active:not(:disabled){transform:translateY(0)}
+  .btn:disabled{opacity:.4; cursor:default}
+  .btn.ghost{background:transparent; color:var(--text); border:1px solid var(--line2)}
+  .btn.ghost:hover{border-color:#fff}
+  .btn.ghost.selected{border-color:#fff; color:#fff; box-shadow:inset 0 0 0 1px #fff}
+  .btn.danger{background:var(--err); color:#fff}
   .row{display:flex; gap:10px} .row>*{flex:1}
-  .reels{display:flex; gap:10px; justify-content:center; margin:18px 0}
-  .reel{width:86px; height:86px; background:var(--panel2); border:1px solid var(--line); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:2.6rem}
-  .reel.spin{animation:jig .18s infinite}
-  @keyframes jig{0%{transform:translateY(-3px)}50%{transform:translateY(3px)}100%{transform:translateY(-3px)}}
-  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:16px 0}
-  .tile{aspect-ratio:1; background:var(--panel2); border:1px solid var(--line); border-radius:10px; font-size:1.5rem; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:transform .08s}
-  .tile:hover:not(:disabled){transform:scale(1.05); border-color:var(--accent)}
-  .tile:disabled{cursor:default; opacity:.85}
-  .tile.gem{background:rgba(55,194,110,.15); border-color:var(--green)}
-  .tile.boom{background:rgba(224,82,82,.2); border-color:var(--red)}
-  .flip-coin{width:120px; height:120px; margin:20px auto; border-radius:50%; background:radial-gradient(circle at 35% 30%, #ffd97a, var(--accent2)); display:flex; align-items:center; justify-content:center; font-size:3rem; font-weight:900; color:#5a3c00; box-shadow:0 0 40px rgba(246,183,60,.35)}
-  .flip-coin.tails{background:radial-gradient(circle at 35% 30%, #9aa7b8, #4a5666); color:#e8ecf3}
-  .flip-coin.spinning{animation:flip .5s infinite}
-  @keyframes flip{0%{transform:rotateY(0)}100%{transform:rotateY(360deg)}}
-  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(130px,1fr)); gap:10px; margin-top:8px}
-  .stat{background:var(--panel2); border:1px solid var(--line); border-radius:10px; padding:12px; text-align:center}
-  .stat .v{font-size:1.15rem; font-weight:800; color:var(--accent)}
-  .stat .k{font-size:.75rem; color:var(--muted); margin-top:3px; text-transform:uppercase; letter-spacing:.5px}
-  table{width:100%; border-collapse:collapse}
-  td,th{padding:9px 8px; text-align:left; border-bottom:1px solid var(--line); font-size:.95rem}
-  th{color:var(--muted); font-size:.78rem; text-transform:uppercase; letter-spacing:.5px}
-  .msg{margin-top:14px; padding:11px 14px; border-radius:9px; font-weight:600; display:none}
-  .msg.ok{display:block; background:rgba(55,194,110,.12); color:var(--green); border:1px solid rgba(55,194,110,.35)}
-  .msg.err{display:block; background:rgba(224,82,82,.12); color:var(--red); border:1px solid rgba(224,82,82,.35)}
+  .msg{margin-top:16px; padding:12px 15px; border-radius:10px; font-weight:600; font-size:.92rem; display:none; line-height:1.5}
+  .msg.ok{display:block; background:var(--panel2); color:var(--white); border:1px solid var(--line2)}
+  .msg.err{display:block; background:rgba(224,82,82,.08); color:var(--err); border:1px solid rgba(224,82,82,.3)}
   .hidden{display:none!important}
-  .mcname{background:var(--panel2); border:1px dashed var(--line); border-radius:9px; padding:10px 14px; margin-top:14px; font-size:.95rem}
-  footer{text-align:center; color:var(--muted); font-size:.8rem; padding:26px 16px}
-  details{margin-top:14px; color:var(--muted); font-size:.85rem}
-  summary{cursor:pointer}
+  .divider{height:1px; background:var(--line); margin:20px 0}
+
+  /* ---------- lobby ---------- */
+  .hero{margin:8px 0 26px}
+  .hero h1{font-size:2rem; font-weight:800; letter-spacing:-.5px; color:var(--white)}
+  .hero h1 em{font-style:normal; color:var(--muted)}
+  .hero p{color:var(--muted); margin-top:8px; max-width:520px; line-height:1.6}
+  .games-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:14px}
+  .game-card{background:var(--panel); border:1px solid var(--line); border-radius:16px; padding:26px 24px; cursor:pointer; transition:border-color .15s, transform .12s; text-align:left}
+  .game-card:hover{border-color:#fff; transform:translateY(-2px)}
+  .game-card .icon{font-size:1.9rem; margin-bottom:14px; filter:grayscale(1)}
+  .game-card h3{font-size:1.05rem; font-weight:800; color:var(--white); letter-spacing:.3px}
+  .game-card p{color:var(--muted); font-size:.85rem; margin-top:7px; line-height:1.5}
+  .game-card .go{margin-top:16px; color:var(--muted); font-size:.78rem; font-weight:700; letter-spacing:1.5px; text-transform:uppercase}
+  .game-card:hover .go{color:#fff}
+
+  /* ---------- coinflip ---------- */
+  .coin-stage{display:flex; justify-content:center; padding:34px 0 26px}
+  .coin{width:130px; height:130px; border-radius:50%; background:radial-gradient(circle at 34% 28%, #ffffff, #b9bdc4 58%, #7d828b); display:flex; align-items:center; justify-content:center; font-size:2.8rem; font-weight:900; color:#0a0b0d; box-shadow:0 14px 40px rgba(255,255,255,.09), inset 0 -6px 14px rgba(0,0,0,.25)}
+  .coin .k{font-family:Georgia,serif}
+  .coin.spinning{animation:spin .45s linear infinite}
+  @keyframes spin{0%{transform:rotateY(0) }100%{transform:rotateY(360deg)}}
+  .coin.tails{background:radial-gradient(circle at 34% 28%, #4a4e56, #2b2e34 58%, #17181c); color:#fff}
+
+  /* ---------- slots ---------- */
+  .reels{display:flex; gap:12px; justify-content:center; margin:26px 0 6px}
+  .reel{width:104px; height:104px; background:var(--panel2); border:1px solid var(--line2); border-radius:14px; display:flex; align-items:center; justify-content:center; font-size:3rem; color:#fff}
+  .reel.spin{animation:jig .16s infinite}
+  .reel.hit{border-color:#fff; box-shadow:0 0 24px rgba(255,255,255,.14)}
+  @keyframes jig{0%{transform:translateY(-4px)}50%{transform:translateY(4px)}100%{transform:translateY(-4px)}}
+
+  /* ---------- mines ---------- */
+  .board{display:grid; grid-template-columns:repeat(5,1fr); gap:9px; margin:22px 0}
+  .tile{aspect-ratio:1; background:var(--panel2); border:1px solid var(--line2); border-radius:11px; font-size:1.55rem; font-weight:800; cursor:pointer; display:flex; align-items:center; justify-content:center; color:transparent; transition:transform .08s, border-color .12s, background .12s}
+  .tile:hover:not(:disabled){transform:scale(1.06); border-color:#fff}
+  .tile:disabled{cursor:default}
+  .tile.gem{color:#fff; border-color:#fff; background:var(--panel3)}
+  .tile.boom{color:#0a0b0d; background:#fff; border-color:#fff}
+  .hud{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:4px}
+  .hud .stat{background:var(--panel2); border:1px solid var(--line); border-radius:11px; padding:13px; text-align:center}
+  .stat .v{font-size:1.12rem; font-weight:800; color:var(--white); font-variant-numeric:tabular-nums}
+  .stat .k{font-size:.68rem; color:var(--muted); margin-top:4px; text-transform:uppercase; letter-spacing:1.6px}
+
+  /* ---------- stats / leaderboard ---------- */
+  .stats{display:grid; grid-template-columns:repeat(auto-fit,minmax(140px,1fr)); gap:10px}
+  table{width:100%; border-collapse:collapse}
+  td,th{padding:12px 10px; text-align:left; border-bottom:1px solid var(--line); font-size:.95rem}
+  th{color:var(--muted); font-size:.7rem; text-transform:uppercase; letter-spacing:1.8px}
+  tr:last-child td{border-bottom:none}
+  .mcname{background:var(--panel2); border:1px dashed var(--line2); border-radius:10px; padding:12px 15px; margin-top:16px; font-size:.92rem; color:var(--dim)}
+
+  details{margin-top:16px; color:var(--muted); font-size:.85rem}
+  summary{cursor:pointer; color:var(--dim)}
+  .setup-note{background:var(--panel2); border:1px solid var(--line2); border-radius:10px; padding:12px 15px; margin-top:14px; display:none; word-break:break-all; font-size:.88rem; color:var(--dim)}
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">🍩 Koala<span> Bet</span></div>
+  <div class="brand" onclick="go('lobby')"><span class="ko">🐨</span> KOALA <span style="color:var(--muted); font-weight:600">BET</span></div>
   <div class="balance-chip hidden" id="balanceChip">🪙 0</div>
 </header>
 
-<!-- ============ SETUP (first visit) ============ -->
+<!-- ============ SETUP (owner only) ============ -->
 <section id="view-setup" class="hidden">
-  <main>
+  <main style="max-width:560px">
     <div class="card">
-      <h2>⚙️ One-time setup</h2>
-      <p class="muted">Paste the <b>site key</b> from the casino owner (run <b>/websetup</b> in the Discord server to get it).</p>
+      <h2>Owner setup</h2>
+      <p class="sub">Paste the site key from <b>/websetup</b>. Players never see this screen once the key is baked into index.html.</p>
       <label>Site key</label>
-      <input id="setupKey" placeholder="paste the key here" autocomplete="off" style="text-transform:lowercase">
+      <input id="setupKey" placeholder="paste the key" autocomplete="off">
       <button class="btn" id="btnSetup">Save</button>
-      <div id="setupSnippet" class="msg ok" style="display:none; word-break:break-all"></div>
-      <details><summary>Owner: remove this screen for players</summary>
-        <p style="margin-top:8px">After saving, copy the highlighted line into <b>index.html</b> (the <code>SITE_KEY</code> constant at the top of the script) and re-upload to GitHub Pages. Players will then land straight on login.</p>
-      </details>
-      <details><summary>How does this work?</summary>
-        <p style="margin-top:8px">Your bets are sent into a private Discord channel as tickets. The casino bot executes them against your real wallet and answers with a result file this page reads from Discord's CDN. No servers, no accounts — just Discord.</p>
+      <div id="setupSnippet" class="setup-note"></div>
+      <details><summary>What is this?</summary>
+        <p style="margin-top:8px">The key points this page at the casino's private Discord ticket channel. Bets go in as tickets; the bot answers on the same message. No servers, no tunnels — just Discord.</p>
       </details>
     </div>
   </main>
@@ -92,92 +132,132 @@
 
 <!-- ============ LOGIN ============ -->
 <section id="view-login" class="hidden">
-  <main>
-    <div class="card">
-      <h2>🌐 Log in</h2>
-      <p class="muted">Your casino wallet lives on the Discord bot — the website plays with the same balance.</p>
-      <label>Step 1 — in Discord, run <b>/link</b> to get a code</label>
-      <label>Step 2 — enter the code here</label>
-      <input id="loginCode" placeholder="e.g. 7GK2MQX9" maxlength="8" autocomplete="off" style="text-transform:uppercase; letter-spacing:4px; font-size:1.3rem; text-align:center">
+  <main style="max-width:560px">
+    <div class="card" style="padding:36px">
+      <h2>Welcome back</h2>
+      <p class="sub">Your wallet lives on the Discord bot — the site plays with the same balance.</p>
+      <label>Step 1 — run <b style="color:#fff">/link</b> in Discord</label>
+      <label>Step 2 — enter the code</label>
+      <input id="loginCode" placeholder="••••••••" maxlength="8" autocomplete="off" style="text-transform:uppercase; letter-spacing:8px; font-size:1.5rem; text-align:center; font-weight:800">
       <button class="btn" id="btnLogin">Log in</button>
       <div id="loginError" class="msg"></div>
-      <p class="muted" style="margin-top:10px">Codes last 10 minutes and work once.</p>
+      <p class="muted" style="margin-top:14px">Codes last 10 minutes and work once. Session stays for 30 days.</p>
     </div>
   </main>
 </section>
 
 <!-- ============ APP ============ -->
 <section id="view-app" class="hidden">
-  <nav>
-    <button data-tab="games" class="active">🎮 Games</button>
-    <button data-tab="wallet">💰 Wallet</button>
-    <button data-tab="stats">📊 Stats</button>
-    <button data-tab="top">🏆 Top</button>
+  <nav id="mainNav">
+    <button data-page="lobby" class="active">Lobby</button>
+    <button data-page="flip">Coinflip</button>
+    <button data-page="slots">Slots</button>
+    <button data-page="mines">Mines</button>
+    <button data-page="wallet">Wallet</button>
+    <button data-page="stats">Stats</button>
+    <button data-page="top">Top</button>
   </nav>
 
   <main>
-    <div id="tab-games">
+    <!-- LOBBY -->
+    <div id="page-lobby">
+      <div class="hero">
+        <h1> Koala Bet<em>.</em></h1>
+        <p>Three games. One wallet, shared with the Discord bot. Deposits and withdrawals pay out in-game, automatically.</p>
+      </div>
+      <div class="games-grid">
+        <button class="game-card" onclick="go('flip')">
+          <div class="icon">🪙</div>
+          <h3>Coinflip</h3>
+          <p>Pick a side, call it. Winners take 1.96x.</p>
+          <div class="go">Play →</div>
+        </button>
+        <button class="game-card" onclick="go('slots')">
+          <div class="icon">🎰</div>
+          <h3>Slots</h3>
+          <p>Three reels. Triple symbols pay up to 75x.</p>
+          <div class="go">Play →</div>
+        </button>
+        <button class="game-card" onclick="go('mines')">
+          <div class="icon">💣</div>
+          <h3>Mines</h3>
+          <p>Uncover gems, dodge bombs, cash out any time.</p>
+          <div class="go">Play →</div>
+        </button>
+      </div>
+    </div>
+
+    <!-- COINFLIP -->
+    <div id="page-flip" class="hidden">
       <div class="card">
-        <h2>🪙 Coinflip</h2>
-        <p class="muted">Pick a side. Win pays 1.96x your bet.</p>
+        <h2>Coinflip</h2>
+        <p class="sub">Call it. Winners take 1.96x their bet.</p>
         <label>Your side</label>
         <div class="row">
-          <button class="btn secondary side-btn" data-side="heads">🪙 Heads</button>
-          <button class="btn secondary side-btn" data-side="tails">🌑 Tails</button>
+          <button class="btn ghost side-btn selected" data-side="heads">Heads</button>
+          <button class="btn ghost side-btn" data-side="tails">Tails</button>
         </div>
-        <label>Bet amount</label>
+        <label>Bet</label>
         <input id="flipBet" type="number" min="1" value="1000">
-        <button class="btn" id="btnFlip">Flip!</button>
-        <div class="flip-coin" id="flipCoin">🪙</div>
+        <button class="btn" id="btnFlip">Flip</button>
+        <div class="coin-stage"><div class="coin" id="flipCoin"><span class="k">K</span></div></div>
         <div class="msg" id="flipMsg"></div>
       </div>
+    </div>
 
+    <!-- SLOTS -->
+    <div id="page-slots" class="hidden">
       <div class="card">
-        <h2>🎰 Slots</h2>
-        <p class="muted">3 of a kind pays big. 2 of a kind pays 1.5x.</p>
-        <label>Bet amount</label>
+        <h2>Slots</h2>
+        <p class="sub">Three of a kind pays up to 75x. Two of a kind pays 1.5x.</p>
+        <label>Bet</label>
         <input id="slotsBet" type="number" min="1" value="1000">
-        <button class="btn" id="btnSlots">Spin!</button>
-        <div class="reels"><div class="reel" id="r0">❔</div><div class="reel" id="r1">❔</div><div class="reel" id="r2">❔</div></div>
+        <button class="btn" id="btnSlots">Spin</button>
+        <div class="reels"><div class="reel" id="r0">◆</div><div class="reel" id="r1">◆</div><div class="reel" id="r2">◆</div></div>
         <div class="msg" id="slotsMsg"></div>
       </div>
+    </div>
 
+    <!-- MINES -->
+    <div id="page-mines" class="hidden">
       <div class="card">
-        <h2>💣 Mines</h2>
-        <p class="muted">Reveal gems, dodge the bombs. Cash out any time.</p>
+        <h2>Mines</h2>
+        <p class="sub">Every safe tile raises your multiplier. One bomb takes it all.</p>
         <div id="minesSetup">
-          <label>Bet amount</label>
+          <label>Bet</label>
           <input id="minesBet" type="number" min="1" value="1000">
           <label>Mines (1–23)</label>
           <select id="minesCount"></select>
-          <button class="btn" id="btnMinesStart">Start game</button>
+          <button class="btn" id="btnMinesStart">Start</button>
         </div>
         <div id="minesPlay" class="hidden">
-          <div class="stats">
+          <div class="hud">
             <div class="stat"><div class="v" id="minesMult">x1.00</div><div class="k">Multiplier</div></div>
+            <div class="stat"><div class="v" id="minesGems">0</div><div class="k">Gems</div></div>
             <div class="stat"><div class="v" id="minesCash">—</div><div class="k">Cash out</div></div>
           </div>
           <div class="board" id="minesBoard"></div>
-          <button class="btn red" id="btnMinesCash">💵 Cash out</button>
+          <button class="btn danger" id="btnMinesCash">Cash out</button>
         </div>
         <div class="msg" id="minesMsg"></div>
       </div>
     </div>
 
-    <div id="tab-wallet" class="hidden">
+    <!-- WALLET -->
+    <div id="page-wallet" class="hidden">
       <div class="card">
-        <h2>💰 Deposit</h2>
-        <p class="muted">Send in-game from your Minecraft account to <b>ezkoala</b>, then register it here. The watcher auto-detects your payment.</p>
-        <label>Your Minecraft username</label>
-        <input id="depMc" placeholder="e.g. ItsCrispyTT" maxlength="16">
+        <h2>Deposit</h2>
+        <p class="sub">Send in-game to <b style="color:#fff">ezkoala</b>, then register it. The watcher confirms automatically.</p>
+        <label>Minecraft username</label>
+        <input id="depMc" placeholder="ItsCrispyTT" maxlength="16">
         <label>Amount you are sending</label>
-        <input id="depAmount" type="number" min="1" placeholder="e.g. 100000">
-        <button class="btn" id="btnDeposit">💸 I'm sending</button>
+        <input id="depAmount" type="number" min="1" placeholder="100000">
+        <button class="btn" id="btnDeposit">I'm sending</button>
         <div class="msg" id="depMsg"></div>
       </div>
-      <div class="card">
-        <h2>🏧 Withdraw</h2>
-        <p class="muted">ezkoala will <b>/pay</b> you in-game automatically (within seconds while he's online).</p>
+      <div class="card" style="margin-top:16px">
+        <h2>Withdraw</h2>
+        <p class="sub">ezkoala pays you in-game automatically, usually within seconds while online.</p>
         <label>Amount</label>
         <input id="wdAmount" type="number" min="1">
         <button class="btn" id="btnWithdraw">Withdraw</button>
@@ -185,44 +265,44 @@
       </div>
     </div>
 
-    <div id="tab-stats" class="hidden">
+    <!-- STATS -->
+    <div id="page-stats" class="hidden">
       <div class="card">
-        <h2>📊 Your stats</h2>
+        <h2>Your stats</h2>
+        <p class="sub">All-time, both Discord and website play.</p>
         <div class="stats" id="statsGrid"></div>
         <div class="mcname" id="mcLinked"></div>
       </div>
     </div>
 
-    <div id="tab-top" class="hidden">
+    <!-- TOP -->
+    <div id="page-top" class="hidden">
       <div class="card">
-        <h2>🏆 Richest gamblers</h2>
-        <table><thead><tr><th>#</th><th>Player</th><th>Balance</th></tr></thead><tbody id="topBody"></tbody></table>
+        <h2>Top balances</h2>
+        <p class="sub">The richest gamblers on the server.</p>
+        <table><thead><tr><th style="width:52px">#</th><th>Player</th><th style="text-align:right">Balance</th></tr></thead><tbody id="topBody"></tbody></table>
       </div>
     </div>
   </main>
 </section>
 
-<footer>Play money only · same wallet as the Discord bot · gamble responsibly 🍩</footer><script>
-/* ================================================================
-   SITE KEY — paste the key from /websetup between the quotes and
-   players never see any setup screen; they just /link and play.
-   Example: const SITE_KEY = "hRb7xKqP2mN8vC4zQ6tYwA";
-   ================================================================ */
-const SITE_KEY = "";
+<footer>KOALA BET · play money · same wallet as the Discord bot</footer>
 
+<script>
 /* ================================================================
-   Transport: Discord webhooks only. No server, no tunnel.
-     1. webhook-post  "!web <ticket> <token> <action> <args-json>"
-     2. poll the channel for a message whose attachment is <ticket>.json
-        (the bot replies with the result as that file; Discord's CDN is CORS-open)
-   Everything the site knows comes from the "site key" = base64 config
-   the bot owner gets from /websetup (contains webhook URL + channel id).
+   Transport: Discord webhooks only. Bet rides in a webhook message;
+   the bot edits that message with the result; site polls its own
+   message via the webhook-token endpoint (CORS-open).
    ================================================================ */
 const $ = id => document.getElementById(id);
-console.log("🍩 Koala Bet site build 2026-09-26.4 (webhook-edit transport)");
+console.log("🐨 Koala Bet build 2026-09-26.6 (monochrome redesign)");
+/* Paste your /websetup site key here and players skip the setup screen:
+   const SITE_KEY = "your-key-here"; */
+const SITE_KEY = "";
 const HOOK_KEY = "casino_hook", CHAN_KEY = "casino_chan", TOKEN_KEY = "casino_token";
 let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
 let WALLET = null;
+let lastBalance = null;
 
 function hook() { return localStorage.getItem(HOOK_KEY) || ""; }
 function chanId() { return localStorage.getItem(CHAN_KEY) || ""; }
@@ -260,33 +340,71 @@ async function call(action, args = {}) {
   return { ok: false, error: "casino bot didn't respond — is it online?" };
 }
 
+/* ================= balance (live) ================= */
+function setBalance(n, animate) {
+  if (!WALLET) WALLET = {};
+  const changed = lastBalance !== null && lastBalance !== n;
+  WALLET.balance = n;
+  lastBalance = n;
+  const chip = $("balanceChip");
+  chip.textContent = "🪙 " + n.toLocaleString();
+  if (changed && animate) {
+    chip.classList.remove("bump");
+    void chip.offsetWidth;           // restart animation
+    chip.classList.add("bump");
+    setTimeout(() => chip.classList.remove("bump"), 700);
+  }
+}
+
+async function refreshWallet() {
+  const d = await call("wallet");
+  if (d.ok) { WALLET = d.wallet; setBalance(WALLET.balance, true); }
+}
+// live balance: poll while the tab is visible
+setInterval(() => {
+  if (TOKEN && document.visibilityState === "visible" && !$("view-app").classList.contains("hidden")) {
+    refreshWallet();
+  }
+}, 5000);
+
 /* ================= views ================= */
 function show(view) {
   ["setup", "login", "app"].forEach(v => $("view-" + v).classList.toggle("hidden", v !== view));
 }
+function go(page) {
+  document.querySelectorAll("#mainNav button").forEach(b =>
+    b.classList.toggle("active", b.dataset.page === page));
+  ["lobby","flip","slots","mines","wallet","stats","top"].forEach(p =>
+    $("page-" + p).classList.toggle("hidden", p !== page));
+  window.scrollTo({ top: 0 });
+  if (page === "stats") renderStats(WALLET);
+  if (page === "top") refreshTop();
+}
+document.querySelectorAll("#mainNav button").forEach(b =>
+  b.onclick = () => go(b.dataset.page));
+
 function showMsg(id, text, ok) {
   const el = $(id);
   el.textContent = text;
   el.className = "msg " + (ok ? "ok" : "err");
   clearTimeout(el._t);
-  el._t = setTimeout(() => el.className = "msg", 7000);
+  el._t = setTimeout(() => el.className = "msg", 8000);
 }
-function setBalance(n) { if (WALLET) { WALLET.balance = n; $("balanceChip").textContent = "🪙 " + n.toLocaleString(); } }
 
 function enterApp() {
   show("app");
   $("balanceChip").classList.remove("hidden");
-  $("balanceChip").textContent = "🪙 " + (WALLET ? WALLET.balance.toLocaleString() : 0);
+  go("lobby");
 }
 function logout() {
-  TOKEN = ""; WALLET = null;
+  TOKEN = ""; WALLET = null; lastBalance = null;
   localStorage.removeItem(TOKEN_KEY);
+  $("balanceChip").classList.add("hidden");
   show("login");
 }
 
 /* ================= boot ================= */
 (function boot() {
-  // A baked-in SITE_KEY skips the setup screen entirely for players.
   if (SITE_KEY && !hook()) {
     const cfg = decodeSiteKey(SITE_KEY);
     if (cfg) {
@@ -297,11 +415,13 @@ function logout() {
   if (!hook() || !chanId()) return show("setup");
   if (TOKEN) {
     call("wallet").then(d => {
-      if (d.ok) { WALLET = d.wallet; enterApp(); } else logout();
+      if (d.ok) { WALLET = d.wallet; lastBalance = WALLET.balance; enterApp(); setBalance(WALLET.balance, false); }
+      else logout();
     });
   } else show("login");
 })();
 
+/* ================= setup + login ================= */
 function decodeSiteKey(key) {
   try {
     const pad = "=".repeat((4 - (key.length % 4)) % 4);
@@ -313,30 +433,28 @@ function decodeSiteKey(key) {
 
 $("btnSetup").onclick = () => {
   const cfg = decodeSiteKey($("setupKey").value.trim());
-  if (!cfg) { alert("That site key doesn't look right — ask the owner to run /websetup."); return; }
+  if (!cfg) { alert("That site key doesn't look right — run /websetup again."); return; }
   localStorage.setItem(HOOK_KEY, cfg.h);
   localStorage.setItem(CHAN_KEY, String(cfg.c));
-  // Show the owner the exact line to bake into index.html
   const snip = $("setupSnippet");
-  snip.textContent = `const SITE_KEY = "${$("setupKey").value.trim()}";  ← paste into index.html`; 
+  snip.textContent = 'Bake for players: const SITE_KEY = "' + $("setupKey").value.trim() + '";  in index.html';
   snip.style.display = "block";
   show("login");
 };
 
-/* ================= login ================= */
 $("btnLogin").onclick = async () => {
   const code = $("loginCode").value.trim().toUpperCase();
   if (code.length !== 8) return showMsg("loginError", "Codes are 8 characters — run /link in Discord.", false);
   $("btnLogin").disabled = true;
   try {
     const d = await call("login", { code });
-    if (!d.ok) {
-      showMsg("loginError", d.error || "login failed", false);
-    } else {
+    if (!d.ok) showMsg("loginError", d.error || "login failed", false);
+    else {
       TOKEN = d.token;
       localStorage.setItem(TOKEN_KEY, TOKEN);
       WALLET = d.wallet;
       enterApp();
+      setBalance(WALLET.balance, false);
     }
   } catch (e) {
     showMsg("loginError", "Unexpected error: " + e.message, false);
@@ -349,63 +467,70 @@ $("loginCode").addEventListener("keydown", e => { if (e.key === "Enter") $("btnL
 let chosenSide = "heads";
 document.querySelectorAll(".side-btn").forEach(b => b.onclick = () => {
   chosenSide = b.dataset.side;
-  document.querySelectorAll(".side-btn").forEach(x => x.style.borderColor = "");
-  b.style.borderColor = "var(--accent)";
+  document.querySelectorAll(".side-btn").forEach(x => x.classList.remove("selected"));
+  b.classList.add("selected");
 });
-document.querySelector('.side-btn[data-side="heads"]').style.borderColor = "var(--accent)";
 
 $("btnFlip").onclick = async () => {
   const bet = parseInt($("flipBet").value);
   const coin = $("flipCoin");
-  coin.className = "flip-coin spinning"; coin.textContent = "❔";
+  coin.className = "coin spinning";
+  coin.innerHTML = "<span class='k'>?</span>";
   $("btnFlip").disabled = true;
   const data = await call("flip", { bet, side: chosenSide });
   $("btnFlip").disabled = false;
-  if (!data.ok) { coin.className = "flip-coin"; coin.textContent = "🪙"; return showMsg("flipMsg", data.error, false); }
+  if (!data.ok) { coin.className = "coin"; coin.innerHTML = "<span class='k'>K</span>"; return showMsg("flipMsg", data.error, false); }
   const r = data.result;
-  coin.className = "flip-coin" + (r.side === "Tails" ? " tails" : "");
-  coin.textContent = r.side === "Heads" ? "🪙" : "🌑";
-  WALLET = r.wallet; setBalance(r.wallet.balance);
-  showMsg("flipMsg", r.won ? `🎉 It's ${r.side} — you won ${r.payout.toLocaleString()}!` : `💀 It's ${r.side} — you lost ${bet.toLocaleString()}.`, r.won);
+  setTimeout(() => {
+    coin.className = "coin" + (r.side === "Tails" ? " tails" : "");
+    coin.innerHTML = r.side === "Heads" ? "<span class='k'>K</span>" : "<span class='k'>✕</span>";
+    WALLET = r.wallet; setBalance(r.wallet.balance, true);
+    showMsg("flipMsg", r.won ? `It's ${r.side.toLowerCase()} — you won ${r.payout.toLocaleString()}.` : `It's ${r.side.toLowerCase()} — you lost ${bet.toLocaleString()}.`, r.won);
+  }, 900);
 };
 
 /* ================= slots ================= */
-const SYMS = ["🍒","🍋","🍊","🍇","🔔","⭐","💎"];
+// engine symbols (bot-side) → monochrome display glyphs
+const SYM_DISPLAY = { "🍒":"●", "🍋":"▲", "🍊":"■", "🍇":"◆", "🔔":"✦", "⭐":"★", "💎":"♛" };
+const SPIN_GLYPHS = ["●","▲","■","◆","✦","★","♛"];
 $("btnSlots").onclick = async () => {
   const bet = parseInt($("slotsBet").value);
   $("btnSlots").disabled = true;
   const reels = [$("r0"), $("r1"), $("r2")];
-  reels.forEach(r => { r.className = "reel spin"; r.textContent = SYMS[Math.floor(Math.random()*7)]; });
-  const spin = setInterval(() => reels.forEach(r => r.textContent = SYMS[Math.floor(Math.random()*7)]), 90);
+  reels.forEach(r => { r.className = "reel spin"; r.textContent = SPIN_GLYPHS[Math.floor(Math.random()*7)]; });
+  const spin = setInterval(() => reels.forEach(r => r.textContent = SPIN_GLYPHS[Math.floor(Math.random()*7)]), 90);
   const data = await call("slots", { bet });
   setTimeout(() => {
     clearInterval(spin);
     $("btnSlots").disabled = false;
-    if (!data.ok) { reels.forEach(r => { r.className = "reel"; r.textContent = "❔"; }); return showMsg("slotsMsg", data.error, false); }
+    if (!data.ok) { reels.forEach(r => { r.className = "reel"; r.textContent = "◆"; }); return showMsg("slotsMsg", data.error, false); }
     const r = data.result;
-    reels.forEach((el, i) => { el.className = "reel"; el.textContent = r.reels[i]; });
-    WALLET = r.wallet; setBalance(r.wallet.balance);
     const won = r.payout > 0;
-    showMsg("slotsMsg", won ? `🎉 ${r.reels.join(" ")} — you won ${r.payout.toLocaleString()}!` : `💀 ${r.reels.join(" ")} — you lost ${bet.toLocaleString()}.`, won);
+    reels.forEach((el, i) => {
+      el.className = "reel" + (won ? " hit" : "");
+      el.textContent = SYM_DISPLAY[r.reels[i]] || r.reels[i];
+    });
+    WALLET = r.wallet; setBalance(r.wallet.balance, true);
+    showMsg("slotsMsg", won ? `${r.reels.map(s => SYM_DISPLAY[s] || s).join(" ")} — you won ${r.payout.toLocaleString()}.` : `No match — you lost ${bet.toLocaleString()}.`, won);
   }, 1200);
 };
 
 /* ================= mines ================= */
 let minesActive = false;
 const bombsSel = $("minesCount");
-for (let i = 1; i <= 23; i++) bombsSel.add(new Option(i + (i === 3 ? " (classic)" : ""), i));
+for (let i = 1; i <= 23; i++) bombsSel.add(new Option(i + (i === 3 ? "  ·  classic" : ""), i));
 bombsSel.value = "3";
 
 $("btnMinesStart").onclick = async () => {
   const data = await call("mines_start", { bet: parseInt($("minesBet").value), bombs: parseInt(bombsSel.value) });
   if (!data.ok) return showMsg("minesMsg", data.error, false);
-  WALLET = data.wallet; setBalance(data.wallet.balance);
+  WALLET = data.wallet; setBalance(data.wallet.balance, true);
   minesActive = true;
   $("minesSetup").classList.add("hidden");
   $("minesPlay").classList.remove("hidden");
   $("minesMsg").className = "msg";
   buildBoard();
-  updateMinesHud(1.0, 0);
+  updateMinesHud(1.0, 0, 0);
 };
 
 function buildBoard() {
@@ -419,8 +544,9 @@ function buildBoard() {
   }
 }
 
-function updateMinesHud(mult, cash) {
+function updateMinesHud(mult, cash, gems) {
   $("minesMult").textContent = "x" + mult.toFixed(2);
+  $("minesGems").textContent = gems;
   $("minesCash").textContent = cash ? cash.toLocaleString() : "—";
 }
 
@@ -429,19 +555,19 @@ async function pickTile(i, el) {
   el.disabled = true;
   const data = await call("mines_pick", { index: i });
   if (!data.ok) { el.disabled = false; return showMsg("minesMsg", data.error, false); }
-  WALLET = data.wallet; setBalance(data.wallet.balance);
+  WALLET = data.wallet; setBalance(data.wallet.balance, true);
   if (data.died) {
     minesActive = false;
-    el.textContent = "💥"; el.classList.add("boom");
-    showMsg("minesMsg", "💥 BOOM — game over.", false);
-    setTimeout(endMinesRound, 1800);
+    el.textContent = "✕"; el.classList.add("boom");
+    showMsg("minesMsg", "Boom. Game over.", false);
+    setTimeout(endMinesRound, 1900);
   } else {
-    el.textContent = "💎"; el.classList.add("gem");
-    updateMinesHud(data.multiplier, data.cash || data.payout);
+    el.textContent = "◆"; el.classList.add("gem");
+    updateMinesHud(data.multiplier, data.cash || data.payout, el.parentElement.querySelectorAll(".gem").length);
     if (data.cleared) {
       minesActive = false;
-      showMsg("minesMsg", `🏆 Board cleared — ${data.payout.toLocaleString()}!`, true);
-      setTimeout(endMinesRound, 1800);
+      showMsg("minesMsg", `Board cleared — ${data.payout.toLocaleString()}!`, true);
+      setTimeout(endMinesRound, 1900);
     }
   }
 }
@@ -453,8 +579,8 @@ $("btnMinesCash").onclick = async () => {
   $("btnMinesCash").disabled = false;
   if (!data.ok) return showMsg("minesMsg", data.error, false);
   minesActive = false;
-  WALLET = data.wallet; setBalance(data.wallet.balance);
-  showMsg("minesMsg", `💵 Cashed out ${data.payout.toLocaleString()} (x${data.multiplier.toFixed(2)})`, true);
+  WALLET = data.wallet; setBalance(data.wallet.balance, true);
+  showMsg("minesMsg", `Cashed out ${data.payout.toLocaleString()} at x${data.multiplier.toFixed(2)}.`, true);
   setTimeout(endMinesRound, 1500);
 };
 
@@ -471,9 +597,9 @@ $("btnDeposit").onclick = async () => {
   if (!amount || amount < 1) return showMsg("depMsg", "Enter the amount you are sending.", false);
   const data = await call("deposit", { mc_name: mc, amount });
   if (!data.ok) return showMsg("depMsg", data.error, false);
-  showMsg("depMsg", `⏳ Registered! Send ${amount.toLocaleString()} in-game from ${mc} to ${data.to.toUpperCase()} (code ${data.code}). Auto-detected in ~10s — round amounts (1K, 5K, 100K) only.`, true);
-  setTimeout(refreshStatsSilent, 12000);
-  setTimeout(refreshStatsSilent, 25000);
+  showMsg("depMsg", `Registered. Send ${amount.toLocaleString()} in-game from ${mc} to ${data.to.toUpperCase()} (code ${data.code}). It lands in ~10s. Round amounts only — DonutSMP chat abbreviates.`, true);
+  setTimeout(refreshWallet, 12000);
+  setTimeout(refreshWallet, 25000);
 };
 
 $("btnWithdraw").onclick = async () => {
@@ -481,17 +607,13 @@ $("btnWithdraw").onclick = async () => {
   if (!amount || amount < 1) return showMsg("wdMsg", "Enter an amount.", false);
   const data = await call("withdraw", { amount });
   if (!data.ok) return showMsg("wdMsg", data.error, false);
-  WALLET = data.wallet; setBalance(data.wallet.balance);
-  showMsg("wdMsg", `🏧 Queued #${data.withdraw_id} — ${data.to.toUpperCase()} will /pay you ${amount.toLocaleString()} in-game shortly.`, true);
+  WALLET = data.wallet; setBalance(data.wallet.balance, true);
+  showMsg("wdMsg", `Queued #${data.withdraw_id} — ${data.to.toUpperCase()} will /pay you ${amount.toLocaleString()} in-game shortly.`, true);
 };
 
 /* ================= stats & leaderboard ================= */
-async function refreshStatsSilent() {
-  const d = await call("wallet");
-  if (d.ok) { WALLET = d.wallet; setBalance(WALLET.balance); }
-}
-
 function renderStats(w) {
+  if (!w) return;
   const total = w.wins + w.losses;
   const wr = total ? (w.wins / total * 100).toFixed(1) : "0.0";
   $("statsGrid").innerHTML = [
@@ -501,25 +623,18 @@ function renderStats(w) {
     ["Wagered", w.wagered.toLocaleString()],
     ["Net", (w.net >= 0 ? "+" : "") + w.net.toLocaleString()],
   ].map(([k, v]) => `<div class="stat"><div class="v">${v}</div><div class="k">${k}</div></div>`).join("");
-  $("mcLinked").textContent = w.mc_name ? ("🎮 Linked Minecraft account: " + w.mc_name) : "🎮 No Minecraft account linked yet — make a deposit to link one.";
+  $("mcLinked").textContent = w.mc_name ? ("Linked Minecraft account: " + w.mc_name) : "No Minecraft account linked — make a deposit to link one.";
 }
 
-function renderTop(rows) {
-  $("topBody").innerHTML = rows.map((r, i) => {
-    const medal = ["🥇","🥈","🥉"][i] || (i + 1);
+async function refreshTop() {
+  const d = await call("leaderboard");
+  if (!d.ok) return;
+  $("topBody").innerHTML = d.leaderboard.map((r, i) => {
+    const medal = ["1", "2", "3"][i] || (i + 1);
     const me = WALLET && r.discord_id === WALLET.discord_id;
-    return `<tr><td>${medal}</td><td>${me ? "You" : "Player " + String(r.discord_id).slice(-4)}</td><td><b>${r.balance.toLocaleString()}</b></td></tr>`;
+    return `<tr><td style="color:var(--muted)">${medal}</td><td>${me ? "You" : "Player " + String(r.discord_id).slice(-4)}</td><td style="text-align:right; font-weight:800">${r.balance.toLocaleString()}</td></tr>`;
   }).join("");
 }
-
-/* ================= tabs ================= */
-document.querySelectorAll("nav button").forEach(b => b.onclick = async () => {
-  document.querySelectorAll("nav button").forEach(x => x.classList.remove("active"));
-  b.classList.add("active");
-  ["games","wallet","stats","top"].forEach(t => $("tab-" + t).classList.toggle("hidden", t !== b.dataset.tab));
-  if (b.dataset.tab === "stats") { const d = await call("wallet"); if (d.ok) renderStats(d.wallet); }
-  if (b.dataset.tab === "top") { const d = await call("leaderboard"); if (d.ok) renderTop(d.leaderboard); }
-});
 </script>
 </body>
 </html>
