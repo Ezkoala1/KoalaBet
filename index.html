@@ -219,6 +219,7 @@ const SITE_KEY = "";
    the bot owner gets from /websetup (contains webhook URL + channel id).
    ================================================================ */
 const $ = id => document.getElementById(id);
+console.log("🍩 Koala Bet site build 2026-09-26.4 (webhook-edit transport)");
 const HOOK_KEY = "casino_hook", CHAN_KEY = "casino_chan", TOKEN_KEY = "casino_token";
 let TOKEN = localStorage.getItem(TOKEN_KEY) || "";
 let WALLET = null;
@@ -233,15 +234,20 @@ async function call(action, args = {}) {
   const ticket = rand(16);
   // ?wait=true makes Discord return the posted message (with its id) instead
   // of a bodiless 204 — we need that id to poll for the bot's edited answer.
-  const res = await fetch(hook() + "?wait=true", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ content: `!web ${ticket} ${TOKEN || "-"} ${action} ${JSON.stringify(args)}` })
-  });
-  if (!res.ok) return { ok: false, error: "webhook rejected the ticket — check the site key" };
+  let res;
+  try {
+    res = await fetch(hook() + "?wait=true", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ content: `!web ${ticket} ${TOKEN || "-"} ${action} ${JSON.stringify(args)}` })
+    });
+  } catch (e) {
+    return { ok: false, error: "couldn't reach Discord — check your connection" };
+  }
+  if (!res.ok) return { ok: false, error: "webhook rejected the ticket (HTTP " + res.status + ") — check the site key" };
   const posted = await res.json().catch(() => null);
   const msgId = posted && posted.id;
-  if (!msgId) return { ok: false, error: "webhook did not return a message id — redeploy the site with ?wait=true" };
+  if (!msgId) return { ok: false, error: "stale page — hard refresh with Ctrl+F5 and try again" };
   for (let i = 0; i < 30; i++) {
     await new Promise(r => setTimeout(r, i < 6 ? 400 : 700));
     const m = await fetch(`${hook()}/messages/${msgId}`)
@@ -322,13 +328,20 @@ $("btnLogin").onclick = async () => {
   const code = $("loginCode").value.trim().toUpperCase();
   if (code.length !== 8) return showMsg("loginError", "Codes are 8 characters — run /link in Discord.", false);
   $("btnLogin").disabled = true;
-  const d = await call("login", { code });
+  try {
+    const d = await call("login", { code });
+    if (!d.ok) {
+      showMsg("loginError", d.error || "login failed", false);
+    } else {
+      TOKEN = d.token;
+      localStorage.setItem(TOKEN_KEY, TOKEN);
+      WALLET = d.wallet;
+      enterApp();
+    }
+  } catch (e) {
+    showMsg("loginError", "Unexpected error: " + e.message, false);
+  }
   $("btnLogin").disabled = false;
-  if (!d.ok) return showMsg("loginError", d.error || "login failed", false);
-  TOKEN = d.token;
-  localStorage.setItem(TOKEN_KEY, TOKEN);
-  WALLET = d.wallet;
-  enterApp();
 };
 $("loginCode").addEventListener("keydown", e => { if (e.key === "Enter") $("btnLogin").click(); });
 
